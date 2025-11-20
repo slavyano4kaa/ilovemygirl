@@ -111,18 +111,29 @@ async function exists(url){
   });
 }
 
-async function load(){
-  let arr=[];
-  for(let n=1;n<=MAX;n++){
-    let found=null;
-    for(let e of EXTS){
-      const u=`images/${n}.${e}`;
-      if(await exists(u)){ found=u; break; }
+async function load() {
+  const arr = [];
+  const exts = ["png", "jpg", "jpeg", "webp"];
+
+  for (let n = 1; n < 9999; n++) {
+    let found = null;
+
+    for (let ext of exts) {
+      const url = `images/${n}.${ext}`;
+      if (await exists(url)) {
+        found = url;
+        break;
+      }
     }
-    if(found) arr.push(found);
+
+    if (!found) break; // ← Останавливаем загрузку, когда файла нет
+
+    arr.push(found);
   }
+
   return arr;
 }
+
 
 let images=[];
 let index=0;
@@ -208,4 +219,5 @@ window.addEventListener("keydown", e=>{
 
 </body>
 </html>
+
 
