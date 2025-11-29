@@ -76,10 +76,14 @@ body {
     color: #fff;
 }
 
+.input-container {
+    position: relative;
+    margin-top: 12px;
+}
+
 input {
     width: 100%;
-    padding: 12px;
-    margin-top: 12px;
+    padding: 12px 40px 12px 12px; /* добавлен отступ справа под глаз */
     border-radius: 10px;
     border: none;
     outline: none;
@@ -87,10 +91,26 @@ input {
     color: #fff;
 }
 
-/* Цвет placeholder */
 input::placeholder {
     color: #fff;
-    opacity: 1; /* Чтобы белый был полностью видим */
+    opacity: 1;
+}
+
+.show-pass-btn {
+    position: absolute;
+    top: -50%;
+    right: 0;
+    height: 100%;
+    width: 36px;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 10px 10px 0; /* чтобы совпадало с скруглением поля справа */
 }
 
 button {
@@ -126,7 +146,10 @@ button {
 
 <div class="login-box">
     <h2>Вход</h2>
-    <input id="pass" type="password" placeholder="Пароль">
+    <div class="input-container">
+        <input id="pass" type="password" placeholder="Пароль">
+        <button type="button" class="show-pass-btn" onclick="togglePassword()">👁️</button>
+    </div>
     <button onclick="login()">Войти</button>
     <p id="error"></p>
 </div>
@@ -135,16 +158,21 @@ button {
 const CORRECT_PASSWORD = "14082025";
 
 function login() {
-    if (document.getElementById("pass").value === CORRECT_PASSWORD) {
+    const passInput = document.getElementById("pass");
+    if (passInput.value === CORRECT_PASSWORD) {
         localStorage.setItem("auth", "true");
         window.location.href = "/";
     } else {
         document.getElementById("error").innerText =
-            "Ангелочек, пароль не верный :(";
+            "Солнце, пароль не верный :(";
     }
+}
+
+function togglePassword() {
+    const passInput = document.getElementById("pass");
+    passInput.type = passInput.type === "password" ? "text" : "password";
 }
 </script>
 
 </body>
 </html>
-
