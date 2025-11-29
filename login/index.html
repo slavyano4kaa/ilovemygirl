@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вход</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    background: #000;
+    font-family: "Playfair Display", serif;
+    position: relative;
+    overflow: hidden;
+}
+
+.bg-container {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: -3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bg {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.bg-blur {
+    position: absolute;
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+    filter: blur(25px);
+    opacity: 0.9;
+    -webkit-mask-image: linear-gradient(to right, black 0%, transparent 15%, transparent 85%, black 100%);
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: cover;
+    mask-image: linear-gradient(to right, black 0%, transparent 15%, transparent 85%, black 100%);
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: cover;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -2;
+}
+
+.login-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.55);
+    padding: 35px;
+    border-radius: 18px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 25px rgba(0,0,0,0.6);
+    width: 320px;
+    min-width: 320px;
+    max-width: 90vw;
+    text-align: center;
+    color: #fff;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+}
+
+/* Цвет placeholder */
+input::placeholder {
+    color: #fff;
+    opacity: 1; /* Чтобы белый был полностью видим */
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 18px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: #acacac;
+    color: #000;
+    font-weight: bold;
+}
+
+#error {
+    color: #ff8080;
+    margin-top: 12px;
+}
+
+@media (max-width: 350px) {
+    .login-box {
+        padding: 25px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-container">
+    <img src="loveyouuu.jpg" class="bg">
+    <img src="loveyouuu.jpg" class="bg-blur">
+</div>
+
+<div class="login-box">
+    <h2>Вход</h2>
+    <input id="pass" type="password" placeholder="Пароль">
+    <button onclick="login()">Войти</button>
+    <p id="error"></p>
+</div>
+
+<script>
+const CORRECT_PASSWORD = "14082025";
+
+function login() {
+    if (document.getElementById("pass").value === CORRECT_PASSWORD) {
+        localStorage.setItem("auth", "true");
+        window.location.href = "/";
+    } else {
+        document.getElementById("error").innerText =
+            "Солнце, пароль не верный :(";
+    }
+}
+</script>
+
+</body>
+</html>
