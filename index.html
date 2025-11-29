@@ -9,6 +9,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
+<script>
+  if (localStorage.getItem("auth") !== "true") {
+      window.location.href = "/login.html";
+  }
+</script>
 <body>
 		<div class="mobile-warning">
 			<p>Открой пожалуйста сайт с ноутбука :)</p>
@@ -83,3 +88,4 @@
     <script src="scroll.js"></script>
 </body>
 </html>
+
