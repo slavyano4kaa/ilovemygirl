@@ -114,6 +114,9 @@ html,body{
 </div>
 
 <script>
+if (localStorage.getItem("auth") !== "true") {
+      window.location.href = "/login/index.html";
+}
 const EXTS=["png","jpg","jpeg","webp"];
 
 // --- Загрузка всех изображений ---
@@ -276,3 +279,4 @@ window.addEventListener("keydown", e=>{
 
 </body>
 </html>
+
