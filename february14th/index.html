@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для моей любимой 💗</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- КОНВЕРТ (закрытый) -->
+    <div class="envelope" id="envelope">
+        <div class="flap" id="flap"></div>
+        <div class="envelope-content">
+            <span class="envelope-text">💌 Письмо для тебя</span>
+            <small>Жми! Жми!</small>
+        </div>
+    </div>
+
+    <!-- ОТКРЫТКА -->
+    <div class="card" id="card" style="display: none;">
+        <!-- ЭТАП 1: вопрос и котик -->
+        <div class="stage-1" id="stage1">
+            <img src="kitten.jpg" alt="Котик" id="catImage" class="cat-img">
+            <p class="question">Ты будешь моей валентинкой?</p>
+            <div class="button-container">
+                <button class="btn-no" id="btnNo">нет...</button>
+                <button class="btn-yes" id="btnYes">ДА!!!!</button>
+            </div>
+        </div>
+
+        <!-- ЭТАП 2: поздравление (скрыт сначала) -->
+        <div class="stage-2" id="stage2" style="display: none;">
+            <img src="avatar.jpg" alt="Аватар" class="avatar">
+            <h2 class="greeting">С днём Святого Валентина!</h2>
+            <p class="wish" id="customWish"></p>
+            <button class="btn-thanks" id="btnThanks">Спасибоооо, люблю тебя!!!</button>
+        </div>
+    </div>
+
+    <!-- ФИНАЛ -->
+    <div class="final" id="final" style="display: none;">
+        <h1>И я люблю тебя 💗</h1>
+        <p class="reload-text">перезагрузи страницу чтобы посмотреть еще раз</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
