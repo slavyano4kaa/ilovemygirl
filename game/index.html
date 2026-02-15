@@ -22,7 +22,6 @@
             transition: filter 0.3s, background 0.3s;
         }
 
-        /* Прелоадер */
         .preloader {
             position: fixed;
             top: 0;
@@ -87,7 +86,6 @@
             font-size: 1.5rem;
         }
 
-        /* Остальные стили такие же как в рабочей версии */
         body.game-over {
             filter: brightness(0.7) sepia(0.3);
             position: relative;
@@ -111,7 +109,6 @@
             100% { opacity: 1; }
         }
 
-        /* Верхняя панель */
         .top-bar {
             width: 100%;
             display: flex;
@@ -608,11 +605,29 @@
             100% { transform: translateY(-200px) scale(0.5); opacity: 0; }
         }
 
+        /* Генерируем стили для 22 видов тортиков */
         .cake[data-flavor="0"] { background-image: url('cupcake1.png'); }
         .cake[data-flavor="1"] { background-image: url('cupcake2.png'); }
         .cake[data-flavor="2"] { background-image: url('cupcake3.png'); }
         .cake[data-flavor="3"] { background-image: url('cupcake4.png'); }
         .cake[data-flavor="4"] { background-image: url('cupcake5.png'); }
+        .cake[data-flavor="5"] { background-image: url('cupcake6.png'); }
+        .cake[data-flavor="6"] { background-image: url('cupcake7.png'); }
+        .cake[data-flavor="7"] { background-image: url('cupcake8.png'); }
+        .cake[data-flavor="8"] { background-image: url('cupcake9.png'); }
+        .cake[data-flavor="9"] { background-image: url('cupcake10.png'); }
+        .cake[data-flavor="10"] { background-image: url('cupcake11.png'); }
+        .cake[data-flavor="11"] { background-image: url('cupcake12.png'); }
+        .cake[data-flavor="12"] { background-image: url('cupcake13.png'); }
+        .cake[data-flavor="13"] { background-image: url('cupcake14.png'); }
+        .cake[data-flavor="14"] { background-image: url('cupcake15.png'); }
+        .cake[data-flavor="15"] { background-image: url('cupcake16.png'); }
+        .cake[data-flavor="16"] { background-image: url('cupcake17.png'); }
+        .cake[data-flavor="17"] { background-image: url('cupcake18.png'); }
+        .cake[data-flavor="18"] { background-image: url('cupcake19.png'); }
+        .cake[data-flavor="19"] { background-image: url('cupcake20.png'); }
+        .cake[data-flavor="20"] { background-image: url('cupcake21.png'); }
+        .cake[data-flavor="21"] { background-image: url('cupcake22.png'); }
 
         .plate-wrapper {
             width: 200px;
@@ -654,6 +669,23 @@
         .future-cake[data-flavor="2"] { background-image: url('cupcake3.png'); }
         .future-cake[data-flavor="3"] { background-image: url('cupcake4.png'); }
         .future-cake[data-flavor="4"] { background-image: url('cupcake5.png'); }
+        .future-cake[data-flavor="5"] { background-image: url('cupcake6.png'); }
+        .future-cake[data-flavor="6"] { background-image: url('cupcake7.png'); }
+        .future-cake[data-flavor="7"] { background-image: url('cupcake8.png'); }
+        .future-cake[data-flavor="8"] { background-image: url('cupcake9.png'); }
+        .future-cake[data-flavor="9"] { background-image: url('cupcake10.png'); }
+        .future-cake[data-flavor="10"] { background-image: url('cupcake11.png'); }
+        .future-cake[data-flavor="11"] { background-image: url('cupcake12.png'); }
+        .future-cake[data-flavor="12"] { background-image: url('cupcake13.png'); }
+        .future-cake[data-flavor="13"] { background-image: url('cupcake14.png'); }
+        .future-cake[data-flavor="14"] { background-image: url('cupcake15.png'); }
+        .future-cake[data-flavor="15"] { background-image: url('cupcake16.png'); }
+        .future-cake[data-flavor="16"] { background-image: url('cupcake17.png'); }
+        .future-cake[data-flavor="17"] { background-image: url('cupcake18.png'); }
+        .future-cake[data-flavor="18"] { background-image: url('cupcake19.png'); }
+        .future-cake[data-flavor="19"] { background-image: url('cupcake20.png'); }
+        .future-cake[data-flavor="20"] { background-image: url('cupcake21.png'); }
+        .future-cake[data-flavor="21"] { background-image: url('cupcake22.png'); }
 
         .modal {
             display: none;
@@ -973,15 +1005,12 @@
 
     <script>
         // ========== ПРЕЛОАДЕР ТЕКСТУР ==========
+        // Создаем массив с 22 текстурами тортиков + остальные
         const textures = [
             'background.png',
             'table.png',
             'plate.png',
-            'cupcake1.png',
-            'cupcake2.png',
-            'cupcake3.png',
-            'cupcake4.png',
-            'cupcake5.png',
+            ...Array.from({ length: 22 }, (_, i) => `cupcake${i + 1}.png`),
             'coin.png',
             '100coins.png',
             '150coins.png',
@@ -995,7 +1024,7 @@
         const preloaderPercent = document.getElementById('preloaderPercent');
 
         function loadTextures() {
-            textures.forEach((texture, index) => {
+            textures.forEach((texture) => {
                 const img = new Image();
                 img.src = texture;
                 img.onload = () => {
@@ -1008,12 +1037,11 @@
                     if (loadedCount === textures.length) {
                         setTimeout(() => {
                             preloader.classList.add('hidden');
-                            startGame(); // Запускаем игру после загрузки
+                            startGame();
                         }, 500);
                     }
                 };
                 img.onerror = () => {
-                    // Если текстура не найдена, всё равно продолжаем
                     loadedCount++;
                     const percent = Math.round((loadedCount / textures.length) * 100);
                     preloaderBar.style.width = percent + '%';
@@ -1033,6 +1061,8 @@
         function startGame() {
             const MAX_CAKES = 3;
             const MAX_REFRESHES = 3;
+            const TOTAL_FLAVORS = 22; // Всего 22 вида тортиков
+            const ACTIVE_FLAVORS = 8;  // Активно 7-8 видов на поле
             
             const difficultyConfig = {
                 easy: { rows: 1, goalTimed: 20, goalSpeed: 20 },
@@ -1057,6 +1087,9 @@
             let currentDifficulty = 'easy';
             let firstMatchMade = false;
             let refreshesLeft = MAX_REFRESHES;
+            
+            // Активные виды на текущем поле (максимум 8)
+            let activeFlavors = [];
             
             let playerStats = {
                 totalMatches: 0,
@@ -1249,26 +1282,94 @@
             }
 
             // ========== ИГРОВАЯ ЛОГИКА ==========
+            
+            // Функция для получения случайного вкуса из активных
             function randomFlavor() {
-                return Math.floor(Math.random() * 5);
+                // Если активных видов нет или меньше 8, инициализируем
+                if (activeFlavors.length < ACTIVE_FLAVORS) {
+                    refreshActiveFlavors();
+                }
+                // Выбираем случайный из активных
+                return activeFlavors[Math.floor(Math.random() * activeFlavors.length)];
+            }
+            
+            // Обновление пула активных видов
+            function refreshActiveFlavors() {
+                // Генерируем 7-8 случайных видов из 22
+                const count = ACTIVE_FLAVORS;
+                const newFlavors = new Set();
+                
+                // Сначала добавляем текущие виды с досок (если есть)
+                if (planks && planks.length > 0) {
+                    planks.forEach(plank => {
+                        plank.current.forEach(flavor => newFlavors.add(flavor));
+                        plank.future.forEach(flavor => newFlavors.add(flavor));
+                    });
+                }
+                
+                // Добиваем до 8 случайными
+                while (newFlavors.size < count) {
+                    newFlavors.add(Math.floor(Math.random() * TOTAL_FLAVORS));
+                }
+                
+                activeFlavors = Array.from(newFlavors).slice(0, count);
+            }
+            
+            // Функция для проверки и пополнения пустых досок
+            function refillEmptyPlanks() {
+                if (!gameActive) return;
+                
+                let refilled = false;
+                
+                planks.forEach(plank => {
+                    // Если доска пуста
+                    if (plank.current.length === 0) {
+                        refilled = true;
+                        // Берем все из future
+                        const futureCopy = [...plank.future];
+                        
+                        // Переносим будущие в текущие (максимум 3)
+                        for (let f = 0; f < Math.min(futureCopy.length, MAX_CAKES); f++) {
+                            plank.current.push(futureCopy[f]);
+                        }
+                        
+                        // Генерируем новые будущие (столько же, сколько было)
+                        const newFutureCount = futureCopy.length;
+                        plank.future = [];
+                        for (let n = 0; n < newFutureCount; n++) {
+                            plank.future.push(randomFlavor());
+                        }
+                    }
+                });
+                
+                if (refilled) {
+                    renderBoard();
+                }
             }
 
             function generatePlanks(count) {
+                // Обновляем активные виды
+                refreshActiveFlavors();
+                
                 const planks = [];
                 
                 for (let i = 0; i < count; i++) {
                     const flavors = [];
                     
+                    // Гарантированная пара из активных видов
                     const pairFlavor = randomFlavor();
                     flavors.push(pairFlavor, pairFlavor);
                     
+                    // Третий случайный (может быть из активных)
                     flavors.push(randomFlavor());
                     
+                    // Перемешиваем
                     for (let j = flavors.length - 1; j > 0; j--) {
                         const rand = Math.floor(Math.random() * (j + 1));
                         [flavors[j], flavors[rand]] = [flavors[rand], flavors[j]];
                     }
                     
+                    // Урезаем до 1-2 тортиков для начала
                     const startCount = 1 + Math.floor(Math.random() * 2);
                     const current = flavors.slice(0, startCount);
                     
@@ -1582,6 +1683,11 @@
                 renderBoard();
                 checkMatches();
                 clearDrag();
+                
+                // Проверяем пустые доски и пополняем их
+                setTimeout(() => {
+                    refillEmptyPlanks();
+                }, 100);
             }
 
             function checkMatches() {
@@ -1659,7 +1765,10 @@
                         playerStats.totalWins++;
                         victoryOverlay.classList.add('show');
                     } else {
+                        // Обновляем активные виды после матчей
+                        refreshActiveFlavors();
                         checkMatches();
+                        refillEmptyPlanks();
                     }
                     
                     updateStats();
