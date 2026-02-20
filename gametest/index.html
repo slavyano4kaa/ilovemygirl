@@ -20,7 +20,6 @@
             position: fixed;
             inset: 0;
             -webkit-overflow-scrolling: auto;
-            touch-action: none;
             e;
             position: fixed;
             inset: 0;
@@ -946,15 +945,30 @@ body {
             .progress-wrapper.in-topbar {
                 padding: 0;
                 margin: 0;
-                width: 170px;
-                max-width: 170px;
-                flex: 0 0 170px;
+                width: min(340px, 40vw);
+                max-width: 340px;
+                flex: 1 1 280px;
                 height: 44px;
+                overflow: visible;
             }
-            .progress-wrapper.in-topbar .goal-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; font-weight: 800; margin: 0 0 2px 0; line-height: 1; text-shadow: 1px 1px 0 #000; }
-                        .progress-wrapper.in-topbar .matches-full { display: none; }
-            .progress-wrapper.in-topbar .matches-short { display: inline; color: #f1c40f; white-space: nowrap; }
-.progress-wrapper.in-topbar .goal-header span:last-child { display: none; }
+            .progress-wrapper.in-topbar .goal-header {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 6px;
+                font-size: 0.72rem;
+                font-weight: 800;
+                margin: 0 0 2px 0;
+                line-height: 1;
+                text-shadow: 1px 1px 0 #000;
+                min-width: 0;
+                overflow: visible;
+            }
+            /* На мобилке показываем полный вариант "Мэтчи: x/y" через spans (matchesCount/goalCount) */
+            .progress-wrapper.in-topbar .matches-full { display: inline-flex; align-items: center; gap: 2px; white-space: nowrap; flex: 0 0 auto; }
+            .progress-wrapper.in-topbar .matches-full span { flex: 0 0 auto; }
+            .progress-wrapper.in-topbar .matches-short { display: none; }
+.progress-wrapper.in-topbar .goal-header > .rewards-label { display: none; }
             .progress-wrapper.in-topbar .goal-header span:first-child { color: #f1c40f; white-space: nowrap; }
             .progress-wrapper.in-topbar .goal-bar-bg { height: 18px; border-width: 2px; }
             .progress-wrapper.in-topbar .goal-bar-fill { box-shadow: 0 0 10px rgba(241,196,15,0.8); }
@@ -1059,21 +1073,41 @@ body {
   /* Matches short label */
   #matchesShort { font-size: 14px !important; font-weight: 800 !important; white-space: nowrap; }
 
-  /* Stats dropdown: fit screen */
-  .stats-dropdown {
+  /* Stats dropdown: компактно, без необходимости скролла */
+  .stats-dropdown{
     left: 50% !important;
     transform: translateX(-50%) !important;
     min-width: unset !important;
     width: min(92vw, 520px) !important;
-    max-height: 72vh !important;
-    overflow: auto !important;
-    padding: 12px !important;
+    max-height: 78vh !important;
+    padding: 8px !important;
     border-width: 2px !important;
     border-radius: 16px !important;
+    overflow: auto !important;                 /* если всё же не влезло */
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important;            /* разрешаем скролл внутри, при запрете скролла страницы */
   }
-  .stats-grid { gap: 10px !important; }
-  .stat-card { padding: 10px !important; border-radius: 14px !important; }
-  .stat-card .stat-value { font-size: 34px !important; }
+  .stats-header{
+    font-size: 20px !important;
+    margin-bottom: 8px !important;
+  }
+  .stats-grid{
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+  .stat-item{
+    padding: 8px 6px !important;
+    border-radius: 14px !important;
+    min-height: 62px !important;
+  }
+  .stat-value{ font-size: 28px !important; line-height: 1 !important; }
+  .stat-label{ font-size: 11px !important; margin-top: 4px !important; }
+  /* второстепенные блоки (профили/сейвы) делаем компактнее */
+  .profile-selector{ margin-top: 8px !important; gap: 6px !important; }
+  .profile-btn{ padding: 6px 8px !important; font-size: 11px !important; border-radius: 12px !important; }
+  .save-buttons{ margin-top: 8px !important; gap: 6px !important; }
+  .save-btn{ padding: 6px 8px !important; font-size: 11px !important; border-radius: 12px !important; }
 
   /* Game field: 4 columns */
   .board {
@@ -1103,6 +1137,146 @@ body {
     height: calc((100vw - 12px - 18px) / 4 * 0.18) !important;
   }
 }
+
+
+/* ====== MOBILE COMPACT GRID (4 columns) + SMALLER PLANK/PLATE ====== */
+@media (max-width: 1024px), (max-height: 520px), (pointer: coarse) {
+  :root{
+    --cellW: min(23vw, 150px);
+    --plankRatio: 2.53; /* 240/95 */
+  }
+
+  /* keep top bar on one line, progress inside it */
+  .top-bar{ overflow: visible !important; }
+
+  /* If any stray stats button exists near refresh — hide it */
+  .stats-btn-container, .stats-btn{ display:none !important; }
+
+  /* Board becomes 4-column grid */
+  #board.board{
+    display: grid !important;
+    grid-template-columns: repeat(4, var(--cellW)) !important;
+    justify-content: center !important;
+    gap: 8px 8px !important;
+    padding: 6px 6px 10px !important;
+  }
+  .plank-container{
+    width: var(--cellW) !important;
+    margin-bottom: 0 !important;
+  }
+  .plank{
+    width: var(--cellW) !important;
+    height: calc(var(--cellW) / var(--plankRatio)) !important;
+  }
+
+  /* Fix selectors and scale inner areas to plank width */
+  .cakes-area{
+    width: calc(var(--cellW) - 12px) !important;
+    height: calc((var(--cellW) / var(--plankRatio)) - 8px) !important;
+    top: 2px !important;
+  }
+  .cake{
+    width: calc(var(--cellW) * 0.27) !important;
+    height: calc(var(--cellW) * 0.27) !important;
+  }
+
+  .plate-wrapper{
+    width: calc(var(--cellW) - 10px) !important;
+    height: calc(var(--cellW) * 0.34) !important;
+    margin-top: 2px !important;
+  }
+  .plate-area{
+    width: calc(var(--cellW) - 28px) !important;
+    height: calc(var(--cellW) * 0.34) !important;
+    top: -6px !important;
+  }
+  .future-cake{
+    width: calc(var(--cellW) * 0.18) !important;
+    height: calc(var(--cellW) * 0.18) !important;
+  }
+
+  /* Make progress bar thicker but still compact */
+  .goal-bar-bg{ height: 14px !important; }
+  .goal-bar-fill{ height: 14px !important; }
+  .reward-bubble{ transform: translate(-50%, 0) scale(0.75) !important; }
+
+  /* Ensure "Мэтчи:" label visible */
+  .matches-full{ display:inline !important; font-size: 0.95rem !important; }
+  .matches-short{ display:none !important; }
+
+  /* Fix: keep full matches goal visible inside topbar progress */
+  .progress-wrapper.in-topbar { width: 200px !important; max-width: 200px !important; flex: 0 0 200px !important; }
+  .progress-wrapper.in-topbar .goal-header { justify-content: flex-start !important; }
+  .progress-wrapper.in-topbar .goal-header span:last-child { display: none !important; } /* hide "Награды" label in topbar */
+  .progress-wrapper.in-topbar .matches-full { font-size: 0.72rem !important; letter-spacing: 0.2px; }
+  .progress-wrapper.in-topbar .matches-full span { font-size: inherit !important; }
+
+  /* Make stats dropdown contents smaller so it fits without scrolling */
+  .stats-dropdown.show {
+    width: min(560px, 92vw) !important;
+    max-height: 78vh !important;
+  }
+  .stats-grid { gap: 10px !important; padding: 8px !important; }
+  .stat-item { min-height: 86px !important; padding: 10px 10px !important; border-radius: 14px !important; }
+  .stat-value { font-size: 2.0rem !important; line-height: 1.05 !important; }
+  .stat-label { font-size: 0.9rem !important; }
+  .save-buttons { padding: 8px 10px !important; gap: 10px !important; }
+  .save-btn { padding: 10px 0 !important; font-size: 0.9rem !important; border-radius: 12px !important; }
+}
+
+
+/* === Mobile: compact stats dropdown so everything fits without scrolling === */
+@media (max-width: 1024px), (max-height: 520px), (pointer: coarse) {
+  .stats-dropdown.show{
+    width: min(520px, 94vw) !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  .stats-dropdown{
+    padding: 10px 12px !important;
+  }
+  .stats-header{
+    margin-bottom: 6px !important;
+    font-size: 1.15rem !important;
+  }
+  .stats-grid{
+    gap: 8px !important;
+    padding: 0 !important;
+    margin-bottom: 8px !important;
+  }
+  .stat-item{
+    padding: 6px 6px !important;
+    min-height: 56px !important;
+    border-radius: 14px !important;
+  }
+  .stat-value{
+    font-size: 1.55rem !important;
+    margin-bottom: 0px !important;
+  }
+  .stat-label{
+    font-size: 0.75rem !important;
+  }
+  .profile-selector{
+    margin: 8px 0 6px !important;
+    gap: 6px !important;
+  }
+  .profile-btn{
+    padding: 7px 9px !important;
+    font-size: 0.88rem !important;
+    border-radius: 12px !important;
+  }
+  .save-buttons{
+    gap: 8px !important;
+    margin-top: 6px !important;
+  }
+  .save-btn{
+    padding: 8px 10px !important;
+    font-size: 0.88rem !important;
+    border-radius: 12px !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1207,7 +1381,7 @@ body {
             <div class="goal-header">
                 <span class="matches-full">Мэтчи: <span id="matchesCount">0</span>/<span id="goalCount">20</span></span>
                 <span class="matches-short" id="matchesShort">0/20</span>
-                <span>Награды</span>
+                <span class="rewards-label">Награды</span>
             </div>
             <div class="goal-bar-bg">
                 <div class="goal-bar-fill" id="goalProgress" style="width: 0%;"></div>
@@ -1466,25 +1640,28 @@ const statsDropdown = document.getElementById('statsDropdown');
             const importData = document.getElementById('importData');
 
             // ========== UI СТАТИСТИКИ ==========
-			balanceContainer.addEventListener('click', () => {
-				statsDropdown.classList.toggle('show');
-				balanceContainer.classList.toggle('active');
-			});
+            if (balanceContainer && statsDropdown) {
+                balanceContainer.addEventListener('click', () => {
+                    statsDropdown.classList.toggle('show');
+                    balanceContainer.classList.toggle('active');
+                });
+            }
 
-			closeStats.addEventListener('click', () => {
-				statsDropdown.classList.remove('show');
-				balanceContainer.classList.remove('active');
-			});
+            if (closeStats && statsDropdown && balanceContainer) {
+                closeStats.addEventListener('click', () => {
+                    statsDropdown.classList.remove('show');
+                    balanceContainer.classList.remove('active');
+                });
+            }
 
-			document.addEventListener('click', (e) => {
-				if (!balanceContainer.contains(e.target) && 
-					!statsDropdown.contains(e.target)) {
-					statsDropdown.classList.remove('show');
-					balanceContainer.classList.remove('active');
-				}
-			});
-
-            // ========== СИСТЕМА СОХРАНЕНИЙ ==========
+            document.addEventListener('click', (e) => {
+                if (!balanceContainer || !statsDropdown) return;
+                if (!balanceContainer.contains(e.target) && !statsDropdown.contains(e.target)) {
+                    statsDropdown.classList.remove('show');
+                    balanceContainer.classList.remove('active');
+                }
+            });
+// ========== СИСТЕМА СОХРАНЕНИЙ ==========
             function loadFromStorage() {
                 try {
                     const saved = localStorage.getItem(`cakeGame_${currentProfile}`);
@@ -2179,7 +2356,7 @@ const statsDropdown = document.getElementById('statsDropdown');
                 matchesCount.textContent = matches;
                 goalCount.textContent = goal;
                 const matchesShort = document.getElementById('matchesShort');
-                if (matchesShort) matchesShort.textContent = `Мэтчи: ${matches}/${goal}`;
+                if (matchesShort) matchesShort.textContent = `${matches}/${goal}`;
                 const percent = (matches / goal) * 100;
                 goalProgress.style.width = `${percent}%`;
             }
