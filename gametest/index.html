@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тортики для любимой 💗</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Тортики для любимой 💗</title>
     <style>
         * {
             box-sizing: border-box;
@@ -12,6 +15,12 @@
         }
 
         
+        :root {
+            --cellGap: 0.8rem;
+            /* Базовый размер ячейки (доска). Сделано меньше, чтобы 4 колонки всегда помещались */
+            --cellW: clamp(105px, calc((100vw - 72px - (3 * var(--cellGap))) / 4), 175px);
+        }
+
         html, body {
             height: 100%;
             width: 100%;
@@ -20,11 +29,9 @@
             position: fixed;
             inset: 0;
             -webkit-overflow-scrolling: auto;
-            e;
-            position: fixed;
-            inset: 0;
         }
-body {
+        
+        body {
             min-height: 100vh;
             margin: 0;
             background-image: url('background.png');
@@ -449,7 +456,9 @@ body {
             transform: translateY(3px);
             filter: drop-shadow(0 0 0 #5a6263);
         }
-.progress-wrapper {
+        
+        /* ===== ОСНОВНЫЕ СТИЛИ ИГРОВОГО ПОЛЯ ===== */
+        .progress-wrapper {
             width: 100%;
             max-width: 800px;
             margin: 1rem auto;
@@ -521,8 +530,8 @@ body {
         .reward-bubbles {
             position: relative;
             width: 100%;
-            height: 100px;
-            margin-top: -20px;
+            height: 140px;
+            margin-top: -30px;
         }
 
         .reward-bubble {
@@ -538,16 +547,16 @@ body {
         .bubble-arrow {
             width: 0;
             height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-bottom: 20px solid #ffecb3;
-            margin-bottom: 5px;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 28px solid #ffecb3;
+            margin-bottom: 8px;
             filter: drop-shadow(0 4px 2px rgba(0,0,0,0.3));
         }
 
         .bubble-icon {
-            width: 70px;
-            height: 70px;
+            width: 100px !important;
+            height: 100px !important;
             background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
@@ -583,71 +592,70 @@ body {
             padding: 1rem;
         }
 
-        .plank-container {
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        /* ===== СЕТКА ПОЛЯ: 4 колонки (Medium=4×2, Hard=4×3) ===== */
+.board {
+    display: grid;
+    grid-template-columns: repeat(4, var(--cellW));
+    gap: var(--cellGap);
+    justify-content: center;
+    align-content: start;
+    width: 100%;
+    margin: 0 auto;
+}
 
-        .board {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-            max-width: 1100px;
-        }
+.plank-container {
+    width: var(--cellW);
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-        .plank {
-            width: 240px;
-            height: 95px;
-            background-image: url('table.png');
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
-            position: relative;
-            border: none;
-            margin-bottom: 8px;
-        }
+.plank {
+    width: var(--cellW) !important;
+    height: calc(var(--cellW) * 0.395) !important; /* 200 -> 79 */
+    background-image: url('table.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    position: relative;
+    border: none;
+    margin-bottom: 6px;
+}
 
-        .cakes-area {
-            position: absolute;
-            top: 0px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 210px;
-            height: 70px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
+.cakes-area {
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(var(--cellW) * 0.875);  /* 200 -> 175 */
+    height: calc(var(--cellW) * 0.30);  /* 200 -> 60  */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: calc(var(--cellW) * 0.04);
+}
 
-        .cake {
-            width: 70px;
-            height: 70px;
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
-            cursor: grab;
-            background-color: transparent;
-            border: none;
-            outline: none;
-            transition: transform 0.2s ease, opacity 0.2s ease;
-        }
+.cake {
+    width: calc(var(--cellW) * 0.275) !important; /* 200 -> 55 */
+    height: calc(var(--cellW) * 0.275) !important;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: grab;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    flex-shrink: 0;
+}
 
-        .cake:active {
-            cursor: grabbing;
-            transform: scale(0.95);
-        }
+.cake:active {
+    cursor: grabbing;
+    transform: scale(0.95);
+}
 
-        .cake.dragging { opacity: 0.7; }
-        .cake.matched { animation: flyAway 0.5s ease forwards; }
-
-        @keyframes flyAway {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            50% { transform: translateY(-50px) scale(1.2); opacity: 0.8; }
-            100% { transform: translateY(-200px) scale(0.5); opacity: 0; }
-        }
+.cake.dragging { opacity: 0.7; }
+.cake.matched { animation: flyAway 0.5s ease forwards; }
 
         /* Генерируем стили для 22 видов тортиков */
         .cake[data-flavor="0"] { background-image: url('cupcake1.png'); }
@@ -674,38 +682,40 @@ body {
         .cake[data-flavor="21"] { background-image: url('cupcake22.png'); }
 
         .plate-wrapper {
-            width: 200px;
-            height: 80px;
-            margin: 0 auto;
+            width: calc(var(--cellW) * 0.62) !important;
+            height: calc(var(--cellW) * 0.23) !important;
+margin: 0 auto;
             background-image: url('plate.png');
             background-size: 100% 100%;
             background-repeat: no-repeat;
             position: relative;
             border: none;
+            flex-shrink: 0;
         }
 
         .plate-area {
             position: absolute;
-            top: -10px;
+            top: calc(var(--cellW) * -0.035);
             left: 50%;
             transform: translateX(-50%);
-            width: 160px;
-            height: 80px;
+            width: calc(var(--cellW) * 0.50);
+            height: calc(var(--cellW) * 0.23);
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 5px;
+            gap: calc(var(--cellW) * 0.02);
         }
 
         .future-cake {
-            width: 45px;
-            height: 45px;
+            width: calc(var(--cellW) * 0.18) !important;
+            height: calc(var(--cellW) * 0.18) !important;
             background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
             background-color: transparent;
             border: none;
             outline: none;
+            flex-shrink: 0;
         }
 
         .future-cake[data-flavor="0"] { background-image: url('cupcake1.png'); }
@@ -905,16 +915,14 @@ body {
             opacity: 0.95;
             filter: drop-shadow(0 8px 10px rgba(0,0,0,0.6));
         }
-        .cake { touch-action: none; } /* prevent scrolling while dragging */
+        .cake { touch-action: none; }
 
-        /* Mobile layout */
+        /* Mobile layout - ИСПРАВЛЕННАЯ СЕТКА */
         @media (max-width: 1024px), (max-height: 520px), (pointer: coarse) {
-            /* No page scrolling on mobile */
             html, body { overflow: hidden; height: 100%; }
             body { touch-action: manipulation; }
             .center-wrapper { padding: 0.35rem; overflow: hidden; }
 
-            /* Compact top bar: progress + controls on one line */
             .top-bar {
                 flex-direction: row;
                 align-items: center;
@@ -933,7 +941,7 @@ body {
                 width: 100%;
                 min-width: 0;
             }
-/* Make everything smaller */
+            
             .balance-container { padding: 0.25rem 0.7rem; border-width: 2px; }
             .balance-amount { font-size: 1.15rem; }
             .coin-icon { width: 22px; height: 22px; }
@@ -941,22 +949,24 @@ body {
             .timer-center { min-width: 108px; padding: 0.15rem 0.25rem; }
             .timer-display { font-size: 1.35rem; line-height: 1; }
             .timer-bar-container { height: 8px; }
-            /* Tiny progress bar inside top-controls */
+            
             .progress-wrapper.in-topbar {
                 padding: 0;
                 margin: 0;
-                width: min(340px, 40vw);
-                max-width: 340px;
-                flex: 1 1 280px;
+                /* Сделали чуть короче, чтобы справа оставалось больше воздуха */
+                width: min(280px, 34vw);
+                max-width: 280px;
+                flex: 0 1 240px;
                 height: 44px;
                 overflow: visible;
             }
+            
             .progress-wrapper.in-topbar .goal-header {
                 display: flex;
                 justify-content: flex-start;
                 align-items: center;
-                gap: 6px;
-                font-size: 0.72rem;
+                gap: 5px;
+                font-size: 0.68rem;
                 font-weight: 800;
                 margin: 0 0 2px 0;
                 line-height: 1;
@@ -964,22 +974,42 @@ body {
                 min-width: 0;
                 overflow: visible;
             }
-            /* На мобилке показываем полный вариант "Мэтчи: x/y" через spans (matchesCount/goalCount) */
-            .progress-wrapper.in-topbar .matches-full { display: inline-flex; align-items: center; gap: 2px; white-space: nowrap; flex: 0 0 auto; }
-            .progress-wrapper.in-topbar .matches-full span { flex: 0 0 auto; }
+            
+            .progress-wrapper.in-topbar .matches-full { 
+                display: inline-flex; 
+                align-items: center; 
+                gap: 2px; 
+                white-space: nowrap; 
+                flex: 0 0 auto; 
+            }
+            
+            .progress-wrapper.in-topbar .matches-full span { 
+                flex: 0 0 auto; 
+                display: inline !important; 
+            }
+            
             .progress-wrapper.in-topbar .matches-short { display: none; }
-.progress-wrapper.in-topbar .goal-header > .rewards-label { display: none; }
+            .progress-wrapper.in-topbar .goal-header > .rewards-label { display: none; }
             .progress-wrapper.in-topbar .goal-header span:first-child { color: #f1c40f; white-space: nowrap; }
             .progress-wrapper.in-topbar .goal-bar-bg { height: 18px; border-width: 2px; }
             .progress-wrapper.in-topbar .goal-bar-fill { box-shadow: 0 0 10px rgba(241,196,15,0.8); }
-            .progress-wrapper.in-topbar .reward-bubbles { height: 20px; margin-top: -2px; }
-            .progress-wrapper.in-topbar .reward-bubble { width: 20px; height: 20px; font-size: 0.7rem; }
-            .progress-wrapper.in-topbar .reward-bubble img { width: 20px; height: 20px; }
+            
+            .progress-wrapper.in-topbar .reward-bubbles { 
+                height: 40px; 
+                margin-top: -2px; 
+            }
+            
+            .progress-wrapper.in-topbar .reward-bubble { 
+                width: 40px; 
+                height: 40px; 
+            }
+            
+            .progress-wrapper.in-topbar .bubble-icon { 
+                width: 45px !important; 
+                height: 45px !important; 
+            }
+            
             .progress-wrapper.in-topbar .bubble-arrow { display: none; }
-            .progress-wrapper.in-topbar .bubble-icon { width: 22px; height: 22px; }
-            .progress-wrapper.in-topbar .bubble-text { font-size: 0.55rem; margin-top: -2px; }
-            .progress-wrapper.in-topbar .bubble-glow { display: none; }
-
 
             .mode-btn, .difficulty-btn, .fullscreen-btn {
                 white-space: nowrap;
@@ -993,291 +1023,87 @@ body {
             .refresh-btn { font-size: 1.3rem; }
             .refresh-count { font-size: 0.75rem; margin-top: -3px; }
 
-            /* Tiny progress bar */
-            .progress-wrapper {
-                max-width: none;
-                margin: 0;
-                padding: 0.2rem 0 0.1rem;
-                width: 100%;
-            }
-            .goal-header {
-                font-size: 0.85rem;
-                margin-bottom: 0.15rem;
-            }
-            .goal-bar-bg {
-                height: 14px;
-                border-width: 2px;
-                border-radius: 12px;
-            }
-            .goal-bar-fill { border-radius: 12px; }
-            .goal-marker { border-right-width: 1px; }
+            /* Мобильная сетка: 4 колонки и масштаб под ширину экрана */
+:root {
+    --cellGap: 8px;
+    --cellW: clamp(70px, calc((100vw - 24px - (3 * var(--cellGap))) / 4), 135px);
+}
 
-            .reward-bubbles {
-                height: 26px;
-                margin-top: -2px;
-            }
-            .bubble-arrow { display: none; }
-            .bubble-icon {
-                width: 22px;
-                height: 22px;
-                filter: drop-shadow(0 2px 2px rgba(0,0,0,0.45));
-            }
-            .reward-bubble.collected .bubble-icon::after {
-                width: 14px;
-                height: 14px;
-                font-size: 0.9rem;
-                top: -6px;
-                right: -6px;
-            }
+.board {
+    gap: var(--cellGap);
+    padding: 0 12px;
+}
 
-            /* Board should fit 4x3 even in Hard */
-            .board {
-                gap: 0.35rem;
-                max-width: 100vw;
-            }
-            .plank-container { margin-bottom: 0.45rem; }
-            .plank { width: 165px; height: 64px; margin-bottom: 5px; }
-            .cakes-area { width: 145px; height: 48px; gap: 5px; top: 2px; }
-            .cake { width: 44px; height: 44px; }
+/* Чуть компактнее вертикальные отступы */
+.plank-container { margin-bottom: 6px; }
+.plank { margin-bottom: 4px; }
 
-            .plate-wrapper { width: 135px; height: 52px; }
-            .plate-area { width: 112px; height: 52px; top: -5px; gap: 4px; }
-            .future-cake { width: 28px; height: 28px; }
-        
+/* ===== Компактная статистика на мобилке (влезает по высоте) ===== */
+.stats-dropdown{
+    left: 0.5rem;
+    right: 0.5rem;
+    min-width: unset;
+    width: calc(100vw - 1rem);
+    max-width: 520px;
+    padding: 0.85rem;
+    border-width: 2px;
+    border-radius: 16px;
+    margin-top: 0.35rem;
+}
+.stats-header{
+    font-size: 1.15rem;
+    margin-bottom: 0.55rem;
+}
+.close-stats{ font-size: 1.6rem; padding: 0 0.35rem; }
+.stats-grid{ gap: 0.5rem; }
+.stat-item{
+    padding: 0.35rem 0.45rem;
+    min-height: 44px;
+    border-radius: 12px;
+}
+.stat-value{
+    font-size: 1.2rem;
+    line-height: 1.05;
+    margin-bottom: 0.12rem;
+}
+.stat-label{
+    font-size: 0.68rem;
+    line-height: 1.1;
+}
+.profile-selector{ gap: 0.4rem; margin-top: 0.65rem; }
+.profile-btn{
+    padding: 0.35rem 0.5rem;
+    font-size: 0.8rem;
+    border-radius: 18px;
+}
+.save-buttons{ gap: 0.4rem; margin-top: 0.55rem; }
+.save-btn{
+    padding: 0.35rem 0.5rem;
+    font-size: 0.78rem;
+    border-radius: 18px;
+}
 
-            /* Much smaller boards/plates so 4x3 fits on screen */
-            .board { gap: 0.35rem; max-width: 100vw; }
-            .plank { width: 135px; height: 48px; margin-bottom: 2px; }
-            .cakes-area { width: 118px; height: 38px; top: -2px; gap: 4px; }
-            .cake { width: 34px; height: 34px; }
-
-            .plate-wrapper { width: 118px; height: 44px; }
-            .plate-area { width: 98px; height: 44px; top: -5px; gap: 3px; }
-            .future-cake { width: 26px; height: 26px; }
-
-            /* Reduce vertical spacing */
             .center-wrapper { padding: 0.25rem; }
-}
+        }
 
-    
+        /* ====== ПРИНУДИТЕЛЬНОЕ ОТОБРАЖЕНИЕ goalCount ====== */
+        #goalCount,
+        .matches-full #goalCount,
+        span#goalCount,
+        .progress-wrapper #goalCount {
+            display: inline !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            width: auto !important;
+            height: auto !important;
+            position: static !important;
+            float: none !important;
+        }
 
-/* === Mobile compact layout v8 === */
-@media (max-width: 1024px), (max-height: 520px), (pointer: coarse) {
-  /* Keep dropdown visible (don't clip) */
-  .top-bar { overflow: visible !important; }
-
-  /* Progress bar: thicker */
-  .goal-bar { height: 12px !important; }
-  .goal-progress { height: 12px !important; }
-
-  /* Matches short label */
-  #matchesShort { font-size: 14px !important; font-weight: 800 !important; white-space: nowrap; }
-
-  /* Stats dropdown: компактно, без необходимости скролла */
-  .stats-dropdown{
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    min-width: unset !important;
-    width: min(92vw, 520px) !important;
-    max-height: 78vh !important;
-    padding: 8px !important;
-    border-width: 2px !important;
-    border-radius: 16px !important;
-    overflow: auto !important;                 /* если всё же не влезло */
-    -webkit-overflow-scrolling: touch !important;
-    touch-action: pan-y !important;            /* разрешаем скролл внутри, при запрете скролла страницы */
-  }
-  .stats-header{
-    font-size: 20px !important;
-    margin-bottom: 8px !important;
-  }
-  .stats-grid{
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-  }
-  .stat-item{
-    padding: 8px 6px !important;
-    border-radius: 14px !important;
-    min-height: 62px !important;
-  }
-  .stat-value{ font-size: 28px !important; line-height: 1 !important; }
-  .stat-label{ font-size: 11px !important; margin-top: 4px !important; }
-  /* второстепенные блоки (профили/сейвы) делаем компактнее */
-  .profile-selector{ margin-top: 8px !important; gap: 6px !important; }
-  .profile-btn{ padding: 6px 8px !important; font-size: 11px !important; border-radius: 12px !important; }
-  .save-buttons{ margin-top: 8px !important; gap: 6px !important; }
-  .save-btn{ padding: 6px 8px !important; font-size: 11px !important; border-radius: 12px !important; }
-
-  /* Game field: 4 columns */
-  .board {
-    max-width: 100vw !important;
-    justify-content: flex-start !important;
-    gap: 6px !important;
-    padding: 0 6px !important;
-  }
-
-  /* Planks and plates scaled to fit 4 per row */
-  .plank {
-    width: calc((100vw - 12px - 18px) / 4) !important; /* 2*pad + 3*gaps */
-    height: calc((100vw - 12px - 18px) / 4 * 0.40) !important;
-    margin-bottom: 4px !important;
-  }
-  .plate-wrapper {
-    width: calc((100vw - 12px - 18px) / 4 * 0.84) !important;
-    height: calc((100vw - 12px - 18px) / 4 * 0.32) !important;
-  }
-  .plate-area {
-    width: calc((100vw - 12px - 18px) / 4 * 0.70) !important;
-    height: calc((100vw - 12px - 18px) / 4 * 0.32) !important;
-    top: -8px !important;
-  }
-  .future-cake, .cake {
-    width: calc((100vw - 12px - 18px) / 4 * 0.18) !important;
-    height: calc((100vw - 12px - 18px) / 4 * 0.18) !important;
-  }
-}
-
-
-/* ====== MOBILE COMPACT GRID (4 columns) + SMALLER PLANK/PLATE ====== */
-@media (max-width: 1024px), (max-height: 520px), (pointer: coarse) {
-  :root{
-    --cellW: min(23vw, 150px);
-    --plankRatio: 2.53; /* 240/95 */
-  }
-
-  /* keep top bar on one line, progress inside it */
-  .top-bar{ overflow: visible !important; }
-
-  /* If any stray stats button exists near refresh — hide it */
-  .stats-btn-container, .stats-btn{ display:none !important; }
-
-  /* Board becomes 4-column grid */
-  #board.board{
-    display: grid !important;
-    grid-template-columns: repeat(4, var(--cellW)) !important;
-    justify-content: center !important;
-    gap: 8px 8px !important;
-    padding: 6px 6px 10px !important;
-  }
-  .plank-container{
-    width: var(--cellW) !important;
-    margin-bottom: 0 !important;
-  }
-  .plank{
-    width: var(--cellW) !important;
-    height: calc(var(--cellW) / var(--plankRatio)) !important;
-  }
-
-  /* Fix selectors and scale inner areas to plank width */
-  .cakes-area{
-    width: calc(var(--cellW) - 12px) !important;
-    height: calc((var(--cellW) / var(--plankRatio)) - 8px) !important;
-    top: 2px !important;
-  }
-  .cake{
-    width: calc(var(--cellW) * 0.27) !important;
-    height: calc(var(--cellW) * 0.27) !important;
-  }
-
-  .plate-wrapper{
-    width: calc(var(--cellW) - 10px) !important;
-    height: calc(var(--cellW) * 0.34) !important;
-    margin-top: 2px !important;
-  }
-  .plate-area{
-    width: calc(var(--cellW) - 28px) !important;
-    height: calc(var(--cellW) * 0.34) !important;
-    top: -6px !important;
-  }
-  .future-cake{
-    width: calc(var(--cellW) * 0.18) !important;
-    height: calc(var(--cellW) * 0.18) !important;
-  }
-
-  /* Make progress bar thicker but still compact */
-  .goal-bar-bg{ height: 14px !important; }
-  .goal-bar-fill{ height: 14px !important; }
-  .reward-bubble{ transform: translate(-50%, 0) scale(0.75) !important; }
-
-  /* Ensure "Мэтчи:" label visible */
-  .matches-full{ display:inline !important; font-size: 0.95rem !important; }
-  .matches-short{ display:none !important; }
-
-  /* Fix: keep full matches goal visible inside topbar progress */
-  .progress-wrapper.in-topbar { width: 200px !important; max-width: 200px !important; flex: 0 0 200px !important; }
-  .progress-wrapper.in-topbar .goal-header { justify-content: flex-start !important; }
-  .progress-wrapper.in-topbar .goal-header span:last-child { display: none !important; } /* hide "Награды" label in topbar */
-  .progress-wrapper.in-topbar .matches-full { font-size: 0.72rem !important; letter-spacing: 0.2px; }
-  .progress-wrapper.in-topbar .matches-full span { font-size: inherit !important; }
-
-  /* Make stats dropdown contents smaller so it fits without scrolling */
-  .stats-dropdown.show {
-    width: min(560px, 92vw) !important;
-    max-height: 78vh !important;
-  }
-  .stats-grid { gap: 10px !important; padding: 8px !important; }
-  .stat-item { min-height: 86px !important; padding: 10px 10px !important; border-radius: 14px !important; }
-  .stat-value { font-size: 2.0rem !important; line-height: 1.05 !important; }
-  .stat-label { font-size: 0.9rem !important; }
-  .save-buttons { padding: 8px 10px !important; gap: 10px !important; }
-  .save-btn { padding: 10px 0 !important; font-size: 0.9rem !important; border-radius: 12px !important; }
-}
-
-
-/* === Mobile: compact stats dropdown so everything fits without scrolling === */
-@media (max-width: 1024px), (max-height: 520px), (pointer: coarse) {
-  .stats-dropdown.show{
-    width: min(520px, 94vw) !important;
-    max-height: none !important;
-    height: auto !important;
-    overflow: visible !important;
-  }
-  .stats-dropdown{
-    padding: 10px 12px !important;
-  }
-  .stats-header{
-    margin-bottom: 6px !important;
-    font-size: 1.15rem !important;
-  }
-  .stats-grid{
-    gap: 8px !important;
-    padding: 0 !important;
-    margin-bottom: 8px !important;
-  }
-  .stat-item{
-    padding: 6px 6px !important;
-    min-height: 56px !important;
-    border-radius: 14px !important;
-  }
-  .stat-value{
-    font-size: 1.55rem !important;
-    margin-bottom: 0px !important;
-  }
-  .stat-label{
-    font-size: 0.75rem !important;
-  }
-  .profile-selector{
-    margin: 8px 0 6px !important;
-    gap: 6px !important;
-  }
-  .profile-btn{
-    padding: 7px 9px !important;
-    font-size: 0.88rem !important;
-    border-radius: 12px !important;
-  }
-  .save-buttons{
-    gap: 8px !important;
-    margin-top: 6px !important;
-  }
-  .save-btn{
-    padding: 8px 10px !important;
-    font-size: 0.88rem !important;
-    border-radius: 12px !important;
-  }
-}
-
-</style>
+        .matches-full {
+            display: inline !important;
+        }
+    </style>
 </head>
 <body>
     <!-- Прелоадер -->
@@ -1359,17 +1185,17 @@ body {
                 <button class="mode-btn" data-mode="speed">Speed</button>
             </div>
 
+            <button class="fullscreen-btn" id="fullscreenBtn" title="Полноэкранный режим">Fullscreen</button>
+
             <div class="difficulty-selector">
                 <button class="difficulty-btn easy active" data-difficulty="easy">Easy</button>
                 <button class="difficulty-btn medium" data-difficulty="medium">Medium</button>
                 <button class="difficulty-btn hard" data-difficulty="hard">Hard</button>
             </div>
-</div>
             <div class="refresh-container">
                 <div class="refresh-btn" id="refreshBtn">🔄</div>
                 <div class="refresh-count" id="refreshCount">3/3</div>
             </div>
-            <button class="fullscreen-btn" id="fullscreenBtn" title="Полноэкранный режим">Fullscreen</button>
         </div>
     </div>
 
@@ -1451,8 +1277,9 @@ body {
     </div>
 
     <script>
+        console.log("Loaded build: v18 (4-col grid)");
+        
         // ========== ПРЕЛОАДЕР ТЕКСТУР ==========
-        // Создаем массив с 22 текстурами тортиков + остальные
         const textures = [
             'background.png',
             'table.png',
@@ -1508,8 +1335,8 @@ body {
         function startGame() {
             const MAX_CAKES = 3;
             const MAX_REFRESHES = 3;
-            const TOTAL_FLAVORS = 22; // Всего 22 вида тортиков
-            const ACTIVE_FLAVORS = 8;  // Активно 7-8 видов на поле
+            const TOTAL_FLAVORS = 22;
+            const ACTIVE_FLAVORS = 8;
             
             const difficultyConfig = {
                 easy: { rows: 1, goalTimed: 20, goalSpeed: 20 },
@@ -1535,7 +1362,6 @@ body {
             let firstMatchMade = false;
             let refreshesLeft = MAX_REFRESHES;
             
-            // Активные виды на текущем поле (максимум 8)
             let activeFlavors = [];
             
             let playerStats = {
@@ -1558,7 +1384,6 @@ body {
             let sourcePlankIdx = null;
             let sourceCakeIdx = null;
 
-            // Элементы
             const body = document.body;
             const goalProgress = document.getElementById('goalProgress');
             const matchesCount = document.getElementById('matchesCount');
@@ -1572,7 +1397,6 @@ body {
             const victoryOverlay = document.getElementById('victoryOverlay');
             const gameOverTitle = document.getElementById('gameOverTitle');
 
-            // ========== RESPONSIVE LAYOUT (progress bar inside top bar on mobile) ==========
             const topBarEl = document.querySelector('.top-bar');
             const progressWrapperEl = document.querySelector('.progress-wrapper');
             const progressAnchor = document.getElementById('progressAnchor');
@@ -1586,7 +1410,6 @@ body {
 
                 if (!topBarEl || !progressWrapperEl) return;
 
-                // Create controls wrapper once
                 let controls = topBarEl.querySelector('.top-controls');
                 if (!controls) {
                     controls = document.createElement('div');
@@ -1601,11 +1424,9 @@ body {
                 }
 
                 if (isMobile) {
-                    // Move progress to top inside top-bar
                     controls.insertBefore(progressWrapperEl, controls.firstChild);
                     progressWrapperEl.classList.add('in-topbar');
                 } else {
-                    // Move progress back under top-bar
                     if (progressAnchor && progressAnchor.parentNode) {
                         if (progressAnchor.nextSibling !== progressWrapperEl) {
                             progressAnchor.parentNode.insertBefore(progressWrapperEl, progressAnchor.nextSibling);
@@ -1618,7 +1439,6 @@ body {
             window.addEventListener('resize', applyResponsiveLayout, { passive: true });
             applyResponsiveLayout();
 
-            
             const reward1 = document.getElementById('reward1');
             const reward2 = document.getElementById('reward2');
             const reward3 = document.getElementById('reward3');
@@ -1631,7 +1451,7 @@ body {
             const winPercentEl = document.getElementById('winPercent');
             
             const balanceContainer = document.getElementById('balanceContainer');
-const statsDropdown = document.getElementById('statsDropdown');
+            const statsDropdown = document.getElementById('statsDropdown');
             const closeStats = document.getElementById('closeStats');
             
             const exportModal = document.getElementById('exportModal');
@@ -1639,7 +1459,6 @@ const statsDropdown = document.getElementById('statsDropdown');
             const exportData = document.getElementById('exportData');
             const importData = document.getElementById('importData');
 
-            // ========== UI СТАТИСТИКИ ==========
             if (balanceContainer && statsDropdown) {
                 balanceContainer.addEventListener('click', () => {
                     statsDropdown.classList.toggle('show');
@@ -1661,7 +1480,7 @@ const statsDropdown = document.getElementById('statsDropdown');
                     balanceContainer.classList.remove('active');
                 }
             });
-// ========== СИСТЕМА СОХРАНЕНИЙ ==========
+
             function loadFromStorage() {
                 try {
                     const saved = localStorage.getItem(`cakeGame_${currentProfile}`);
@@ -1779,25 +1598,17 @@ const statsDropdown = document.getElementById('statsDropdown');
                 balanceDisplay.textContent = balance;
             }
 
-            // ========== ИГРОВАЯ ЛОГИКА ==========
-            
-            // Функция для получения случайного вкуса из активных
             function randomFlavor() {
-                // Если активных видов нет или меньше 8, инициализируем
                 if (activeFlavors.length < ACTIVE_FLAVORS) {
                     refreshActiveFlavors();
                 }
-                // Выбираем случайный из активных
                 return activeFlavors[Math.floor(Math.random() * activeFlavors.length)];
             }
             
-            // Обновление пула активных видов
             function refreshActiveFlavors() {
-                // Генерируем 7-8 случайных видов из 22
                 const count = ACTIVE_FLAVORS;
                 const newFlavors = new Set();
                 
-                // Сначала добавляем текущие виды с досок (если есть)
                 if (planks && planks.length > 0) {
                     planks.forEach(plank => {
                         plank.current.forEach(flavor => newFlavors.add(flavor));
@@ -1805,7 +1616,6 @@ const statsDropdown = document.getElementById('statsDropdown');
                     });
                 }
                 
-                // Добиваем до 8 случайными
                 while (newFlavors.size < count) {
                     newFlavors.add(Math.floor(Math.random() * TOTAL_FLAVORS));
                 }
@@ -1813,25 +1623,20 @@ const statsDropdown = document.getElementById('statsDropdown');
                 activeFlavors = Array.from(newFlavors).slice(0, count);
             }
             
-            // Функция для проверки и пополнения пустых досок
             function refillEmptyPlanks() {
                 if (!gameActive) return;
                 
                 let refilled = false;
                 
                 planks.forEach(plank => {
-                    // Если доска пуста
                     if (plank.current.length === 0) {
                         refilled = true;
-                        // Берем все из future
                         const futureCopy = [...plank.future];
                         
-                        // Переносим будущие в текущие (максимум 3)
                         for (let f = 0; f < Math.min(futureCopy.length, MAX_CAKES); f++) {
                             plank.current.push(futureCopy[f]);
                         }
                         
-                        // Генерируем новые будущие (столько же, сколько было)
                         const newFutureCount = futureCopy.length;
                         plank.future = [];
                         for (let n = 0; n < newFutureCount; n++) {
@@ -1846,7 +1651,6 @@ const statsDropdown = document.getElementById('statsDropdown');
             }
 
             function generatePlanks(count) {
-                // Обновляем активные виды
                 refreshActiveFlavors();
                 
                 const planks = [];
@@ -1854,20 +1658,16 @@ const statsDropdown = document.getElementById('statsDropdown');
                 for (let i = 0; i < count; i++) {
                     const flavors = [];
                     
-                    // Гарантированная пара из активных видов
                     const pairFlavor = randomFlavor();
                     flavors.push(pairFlavor, pairFlavor);
                     
-                    // Третий случайный (может быть из активных)
                     flavors.push(randomFlavor());
                     
-                    // Перемешиваем
                     for (let j = flavors.length - 1; j > 0; j--) {
                         const rand = Math.floor(Math.random() * (j + 1));
                         [flavors[j], flavors[rand]] = [flavors[rand], flavors[j]];
                     }
                     
-                    // Урезаем до 1-2 тортиков для начала
                     const startCount = 1 + Math.floor(Math.random() * 2);
                     const current = flavors.slice(0, startCount);
                     
@@ -1962,6 +1762,10 @@ const statsDropdown = document.getElementById('statsDropdown');
                 } else {
                     goal = config.goalSpeed;
                     maxTime = speedTimes[currentDifficulty];
+                }
+                
+                if (goalCount) {
+                    goalCount.textContent = goal;
                 }
                 
                 currentTime = maxTime;
@@ -2079,9 +1883,6 @@ const statsDropdown = document.getElementById('statsDropdown');
                 });
             }
 
-            
-            
-            // ========== DISABLE PAGE SCROLL (GAME SHOULD NOT MOVE) ==========
             (function lockScroll() {
                 const shouldAllow = (target) => {
                     if (!target) return false;
@@ -2095,8 +1896,6 @@ const statsDropdown = document.getElementById('statsDropdown');
                 window.addEventListener('wheel', prevent, { passive: false });
             })();
 
-// ========== DRAG (MOUSE + TOUCH) ==========
-            // HTML5 drag&drop плохо работает на телефонах, поэтому используем Pointer Events.
             let dragGhost = null;
             let activePointerId = null;
             let lastClientX = 0;
@@ -2115,7 +1914,6 @@ const statsDropdown = document.getElementById('statsDropdown');
                 ghost.style.opacity = '0.95';
                 ghost.style.cursor = 'grabbing';
 
-                // Подстраиваем размер под текущий (на мобилке он меньше)
                 const rect = cakeEl.getBoundingClientRect();
                 ghost.style.width = rect.width + 'px';
                 ghost.style.height = rect.height + 'px';
@@ -2166,7 +1964,6 @@ const statsDropdown = document.getElementById('statsDropdown');
                 const cake = e.target.closest('.cake');
                 if (!cake) return;
 
-                // Только ЛКМ на мышке (на тачах button обычно 0)
                 if (e.pointerType === 'mouse' && e.button !== 0) return;
 
                 e.preventDefault();
@@ -2181,10 +1978,8 @@ const statsDropdown = document.getElementById('statsDropdown');
                 draggedElement = cake;
                 draggedElement.classList.add('dragging');
 
-                // Ghost (чтобы тортик было видно при перетаскивании)
                 dragGhost = createGhostFromCake(cake, e.clientX, e.clientY);
 
-                // Захватываем указатель, чтобы не терять события
                 try { cake.setPointerCapture(e.pointerId); } catch (_) {}
 
                 document.addEventListener('pointermove', onGlobalPointerMove, { passive: false });
@@ -2204,7 +1999,6 @@ const statsDropdown = document.getElementById('statsDropdown');
 
             function onGlobalPointerUp(e) {
                 if (activePointerId === null || e.pointerId !== activePointerId) {
-                    // все равно подчистим слушатели
                     document.removeEventListener('pointermove', onGlobalPointerMove);
                     return;
                 }
@@ -2225,7 +2019,6 @@ const statsDropdown = document.getElementById('statsDropdown');
                 clearDrag();
             }
 
-            
             function attemptMove(targetPlankIdx) {
                 if (!gameActive) return;
                 if (sourcePlankIdx === null || sourceCakeIdx === null) {
@@ -2260,7 +2053,6 @@ const statsDropdown = document.getElementById('statsDropdown');
                 checkMatches();
                 clearDrag();
                 
-                // Проверяем пустые доски и пополняем их
                 setTimeout(() => {
                     refillEmptyPlanks();
                 }, 100);
@@ -2341,7 +2133,6 @@ const statsDropdown = document.getElementById('statsDropdown');
                         playerStats.totalWins++;
                         victoryOverlay.classList.add('show');
                     } else {
-                        // Обновляем активные виды после матчей
                         refreshActiveFlavors();
                         checkMatches();
                         refillEmptyPlanks();
@@ -2354,15 +2145,15 @@ const statsDropdown = document.getElementById('statsDropdown');
 
             function updateCounter() {
                 matchesCount.textContent = matches;
-                goalCount.textContent = goal;
+                if (goalCount) {
+                    goalCount.textContent = goal;
+                }
                 const matchesShort = document.getElementById('matchesShort');
                 if (matchesShort) matchesShort.textContent = `${matches}/${goal}`;
                 const percent = (matches / goal) * 100;
                 goalProgress.style.width = `${percent}%`;
             }
 
-            // ========== ОБРАБОТЧИКИ ==========
-            
             document.querySelectorAll('.profile-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     document.querySelectorAll('.profile-btn').forEach(b => b.classList.remove('active'));
@@ -2422,7 +2213,6 @@ const statsDropdown = document.getElementById('statsDropdown');
 
             refreshBtn.addEventListener('click', refreshBoard);
 
-            // Fullscreen (как F11 на ПК)
             const fullscreenBtn = document.getElementById('fullscreenBtn');
             if (fullscreenBtn) {
                 const updateFsLabel = () => {
@@ -2438,7 +2228,6 @@ const statsDropdown = document.getElementById('statsDropdown');
                             await document.exitFullscreen();
                         }
                     } catch (err) {
-                        // На iOS Safari fullscreen может быть недоступен
                         console.warn('Fullscreen error:', err);
                     } finally {
                         updateFsLabel();
@@ -2449,7 +2238,6 @@ const statsDropdown = document.getElementById('statsDropdown');
                 updateFsLabel();
             }
 
-
             document.getElementById('restartFromOverlay').addEventListener('click', () => initGame(true));
             document.getElementById('restartFromVictory').addEventListener('click', () => initGame(true));
 
@@ -2457,7 +2245,6 @@ const statsDropdown = document.getElementById('statsDropdown');
             initGame(true);
         }
 
-        // Запускаем загрузку текстур
         loadTextures();
     </script>
 </body>
