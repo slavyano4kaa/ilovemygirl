@@ -1,18 +1,31 @@
 <!DOCTYPE html>
-
 <html lang="ru">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Тортики для любимой 💗</title>
-<style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тортики для любимой 💗</title>
+    <style>
         * {
             box-sizing: border-box;
             user-select: none;
             font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
         }
 
-        body {
+        
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            overscroll-behavior: none;
+            position: fixed;
+            inset: 0;
+            -webkit-overflow-scrolling: auto;
+            touch-action: none;
+            e;
+            position: fixed;
+            inset: 0;
+        }
+body {
             min-height: 100vh;
             margin: 0;
             background-image: url('background.png');
@@ -22,196 +35,6 @@
             flex-direction: column;
             transition: filter 0.3s, background 0.3s;
         }
-
-
-html, body {
-    height: 100%;
-    overflow: hidden; /* чтобы сайт не скроллился */
-}
-
-/* на игровом поле запрещаем жесты браузера, чтобы перетаскивание пальцем было стабильным */
-.center-wrapper, .board, .plank, .cake, .plate-wrapper {
-    touch-action: none;
-}
-
-/* Призрак тортика при перетаскивании на телефоне */
-.drag-ghost {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 60px;
-    height: 60px;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-9999px, -9999px) scale(1.05);
-    filter: drop-shadow(0 8px 10px rgba(0,0,0,0.6));
-    opacity: 0.95;
-}
-
-.plank.drop-target {
-    filter: drop-shadow(0 0 10px rgba(241,196,15,0.9));
-}
-
-/* Мэтчи (текст) — относится к прогрессу наград (100/150/200) */
-.matches-header{
-    width: 100%;
-    max-width: 900px;
-    margin: 0.15rem 0 0.1rem;
-    padding-left: 1.1rem;
-    color: #ffecb3;
-    font-weight: 800;
-    text-shadow: 2px 2px 0 #000;
-    font-size: 1.05rem;
-    letter-spacing: 0.3px;
-}
-.progress-wrapper{
-    margin-top: 0.25rem;
-    margin-left: 0;
-    margin-right: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* слева сверху */
-}
-
-
-/* Баланс-лейбл скрываем (вместо него иконка+цифра) */
-.balance-label{ display:none; }
-
-/* Статистика не должна уезжать за экран */
-.stats-dropdown{ max-width: min(92vw, 360px); }
-
-@media (pointer: coarse), (max-width: 900px){
-  .stats-dropdown{
-    position: fixed !important;
-    top: calc(var(--topbar-h, 70px) + 8px) !important;
-    left: 10px !important;
-    right: 10px !important;
-    margin-top: 0 !important;
-    min-width: unset !important;
-    max-width: none !important;
-    max-height: calc(100vh - (var(--topbar-h, 70px) + 18px)) !important;
-    overflow: auto !important;
-    z-index: 2000 !important;
-  }
-}
-
-.stats-panel{
-    max-height: 60vh;
-    overflow: auto;
-}
-
-
-/* Прогресс мэтчей (100/150/200) делаем "встроенным" и очень компактным: не должен съедать высоту */
-
-/* Мэтчи-прогресс (это же шкала 100/150/200). Делаем компактно и НЕ перекрываем поле. */
-.progress-wrapper{
-    position: relative;     /* в потоке, чтобы не залезало на тарелки */
-    width: 100%;
-    max-width: 340px;       /* компактно слева */
-    margin: 2px 0 0 14px;
-    padding: 0;
-    pointer-events: none;   /* не мешает перетаскиванию */
-    z-index: 20;
-}
-.matches-header{
-    margin: 0;
-    padding: 0;
-    color: #ffecb3;
-    font-weight: 800;
-    text-shadow: 2px 2px 0 #000;
-    font-size: 0.85rem;
-    letter-spacing: 0.2px;
-}
-.goal-container{
-    position: relative;
-    margin-top: 2px;
-    width: 100%;
-}
-.goal-bar-bg{ height: 5px; border-width: 1px; }
-.reward-bubbles{
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 8px;
-    height: 22px;
-    margin: 0;
-}
-.bubble-icon{ width: 22px; height: 22px; }
-.bubble-arrow{ border-left-width: 5px; border-right-width: 5px; border-bottom-width: 6px; margin-bottom: 0; }
-
-
-
-/* Компактная мобильная верстка */
-@media (max-width: 600px) {
-    .top-bar { padding: 0.22rem 0.5rem; border-bottom-width: 2px; }
-    .balance-container { padding: 0.35rem 0.7rem; border-width: 1px; box-shadow: 0 3px 0 #5a6263; }
-    .coin-icon { width: 26px; height: 26px; }
-    .balance-amount { font-size: 1.25rem; }
-
-    .timer-center { min-width: 120px; }
-    .timer-display { font-size: 1.5rem; }
-    .timer-bar-container { height: 7px; border-width: 1px; }
-
-    .mode-selector, .difficulty-selector { padding: 0.25rem; }
-    .mode-btn { padding: 0.22rem 0.42rem; font-size: 0.68rem; border-radius: 18px; }
-    .difficulty-btn { padding: 0.22rem 0.38rem; font-size: 0.66rem; border-radius: 18px; }
-
-    .refresh-container { padding: 0.15rem 0.55rem; border-width: 1px; }
-    .refresh-btn { font-size: 1.35rem; }
-    .refresh-count { font-size: 0.75rem; margin-top: -1px; }
-
-    .progress-wrapper { margin: 0.2rem auto; padding: 0.15rem 0 0; max-width: 520px; }
-    .goal-header { font-size: 0.8rem; margin-bottom: 0.35rem; }
-    .goal-bar-bg { height: 10px; border-width: 1px; }
-    .goal-marker { border-right-width: 1px; }
-
-    .reward-bubbles { height: 44px; margin-top: -6px; }
-    .bubble-arrow { border-left-width: 8px; border-right-width: 8px; border-bottom-width: 10px; margin-bottom: 2px; }
-    .bubble-icon { width: 38px; height: 38px; }
-
-    .center-wrapper { padding: 0.3rem; }
-    .board { gap: 0.35rem; max-width: 680px; }
-
-.plank { width: 135px; height: 52px; margin-bottom: 0px; }
-    .cakes-area { width: 118px; height: 40px; gap: 5px; }
-    .cake { width: 40px; height: 40px; }
-
-    .plate-wrapper { width: 118px; height: 46px; }
-    .plate-area { width: 98px; height: 46px; top: -5px; }
-    .future-cake { width: 26px; height: 26px; }
-}
-
-
-
-/* На харде поле плотнее: уменьшаем доски/тарелки, чтобы помещалось больше строк */
-.difficulty-hard .plank{ width: 118px; height: 46px; }
-.difficulty-hard .cakes-area{ width: 102px; height: 34px; gap: 4px; }
-.difficulty-hard .cake{ width: 34px; height: 34px; }
-
-.difficulty-hard .plate-wrapper{ width: 104px; height: 40px; }
-.difficulty-hard .plate-area{ width: 86px; height: 40px; top: -5px; }
-.difficulty-hard .future-cake{ width: 22px; height: 22px; }
-
-/* Очень низкие экраны (ландшафт телефонов): ещё сильнее ужимаем верх */
-@media (max-height: 520px) {
-    .top-bar { padding: 0.32rem 0.7rem; }
-    .balance-container { padding: 0.3rem 0.75rem; border-width: 1px; }
-    .balance-amount { font-size: 1.15rem; }
-    .timer-display { font-size: 1.55rem; }
-    .timer-center { min-width: 110px; }
-    .timer-bar-container { height: 6px; }
-    .mode-btn { padding: 0.28rem 0.45rem; font-size: 0.7rem; }
-    .difficulty-btn { padding: 0.28rem 0.4rem; font-size: 0.68rem; }
-    .refresh-container { padding: 0.1rem 0.45rem; }
-    .refresh-btn { font-size: 1.2rem; }
-    .matches-header { font-size: 0.9rem; padding-left: 0.7rem; margin-top: 0.1rem; }
-    .goal-bar-bg { height: 9px; }
-    .reward-bubbles { height: 40px; }
-    .bubble-icon { width: 34px; height: 34px; }
-}
 
         .preloader {
             position: fixed;
@@ -224,7 +47,7 @@ html, body {
             z-index: 10000;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
+            align-items: center;
             transition: opacity 0.5s ease;
         }
 
@@ -307,9 +130,9 @@ html, body {
             justify-content: space-between;
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(10px);
-            border-bottom: 2px solid #dbb47a;
-            padding: 0.55rem 1.1rem;
-            box-shadow: 0 6px 14px rgba(0,0,0,0.45);
+            border-bottom: 3px solid #dbb47a;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
             position: relative;
             z-index: 10;
         }
@@ -339,7 +162,7 @@ html, body {
 
         .coin-icon {
             width: 40px;
-            height: 10px;
+            height: 40px;
             background-image: url('coin.png');
             background-size: contain;
             background-position: center;
@@ -445,7 +268,7 @@ html, body {
 
         .profile-btn {
             padding: 0.5rem 1rem;
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: bold;
             border: none;
             border-radius: 30px;
@@ -492,7 +315,7 @@ html, body {
         }
 
         .timer-display {
-            font-size: 2.2rem;
+            font-size: 3rem;
             font-weight: bold;
             color: white;
             text-shadow: 3px 3px 0 #000, 0 0 20px rgba(255,255,255,0.5);
@@ -502,7 +325,7 @@ html, body {
 
         .timer-bar-container {
             width: 100%;
-            height: 8px;
+            height: 12px;
             background: rgba(0, 0, 0, 0.6);
             border-radius: 20px;
             overflow: hidden;
@@ -518,52 +341,6 @@ html, body {
             box-shadow: 0 0 10px currentColor;
         }
 
-        /* Мини-прогресс мэтчей под таймером (и на ПК, и на телефоне) */
-        .match-mini {
-            margin-top: 0.25rem;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.18rem;
-        }
-
-        .match-mini-label {
-            color: #ffecb3;
-            font-weight: 800;
-            font-size: 0.86rem;
-            text-shadow: 2px 2px 0 #000;
-            line-height: 1;
-            white-space: nowrap;
-        }
-
-        .match-mini-bar {
-            width: 150px;
-            height: 6px;
-            border-radius: 999px;
-            background: rgba(0,0,0,0.55);
-            border: 1px solid rgba(255,236,179,0.9);
-            overflow: hidden;
-        }
-
-        .match-mini-fill {
-            height: 100%;
-            width: 0%;
-            background: #f1c40f;
-            border-radius: 999px;
-            box-shadow: 0 0 10px rgba(241,196,15,0.8);
-            transition: width 0.25s ease;
-        }
-
-        @media (max-width: 600px) {
-            .match-mini { margin-top: 0.18rem; gap: 0.14rem; }
-            .match-mini-label { font-size: 0.78rem; text-shadow: 1px 1px 0 #000; }
-            .match-mini-bar { width: 110px; height: 4px; }
-        }
-
-        @media (max-height: 520px) {
-            .match-mini-bar { width: 105px; }
-        }
-
         .right-panel {
             display: flex;
             align-items: center;
@@ -574,7 +351,7 @@ html, body {
             display: flex;
             gap: 0.3rem;
             background: rgba(0,0,0,0.3);
-            padding: 0.25rem;
+            padding: 0.4rem;
             border-radius: 40px;
         }
 
@@ -601,12 +378,12 @@ html, body {
             display: flex;
             gap: 0.2rem;
             background: rgba(0,0,0,0.3);
-            padding: 0.25rem;
+            padding: 0.4rem;
             border-radius: 40px;
         }
 
         .difficulty-btn {
-            padding: 0.42rem 0.8rem;
+            padding: 0.6rem 1rem;
             font-size: 0.9rem;
             font-weight: bold;
             border: none;
@@ -627,13 +404,13 @@ html, body {
             flex-direction: column;
             align-items: center;
             background: rgba(0,0,0,0.3);
-            padding: 0.15rem 0.62rem;
+            padding: 0.2rem 0.8rem;
             border-radius: 30px;
             border: 2px solid #dbb47a;
         }
 
         .refresh-btn {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             cursor: pointer;
             filter: drop-shadow(0 3px 0 #5a6263);
             transition: all 0.1s;
@@ -652,12 +429,33 @@ html, body {
             margin-top: -5px;
         }
 
-        .progress-wrapper {
+        
+        .stats-btn-container{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background: rgba(0,0,0,0.3);
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            border: 2px solid #f8d77a;
+        }
+        .stats-btn{
+            font-size: 1.7rem;
+            cursor: pointer;
+            filter: drop-shadow(0 3px 0 #5a6263);
+            transition: all 0.1s;
+            line-height: 1;
+        }
+        .stats-btn:active{
+            transform: translateY(3px);
+            filter: drop-shadow(0 0 0 #5a6263);
+        }
+.progress-wrapper {
             width: 100%;
             max-width: 800px;
-            margin: 0.35rem auto;
+            margin: 1rem auto;
             position: relative;
-            padding: 0.35rem 0 0.1rem;
+            padding: 2rem 0 1rem;
         }
 
         .goal-container {
@@ -674,6 +472,9 @@ html, body {
             margin-bottom: 0.5rem;
             text-shadow: 2px 2px 0 #000;
         }
+        .matches-short { display: none; }
+        .matches-full { display: inline; }
+
 
         .goal-header span:first-child {
             color: #f1c40f;
@@ -721,8 +522,8 @@ html, body {
         .reward-bubbles {
             position: relative;
             width: 100%;
-            height: 60px;
-            margin-top: -10px;
+            height: 100px;
+            margin-top: -20px;
         }
 
         .reward-bubble {
@@ -781,6 +582,13 @@ html, body {
             justify-content: center;
             align-items: center;
             padding: 1rem;
+        }
+
+        .plank-container {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .board {
@@ -1072,375 +880,403 @@ html, body {
             text-shadow: 2px 2px 0 #000;
         }
     
+        /* Fullscreen button */
+        .fullscreen-btn {
+            padding: 0.6rem 1.2rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 35px;
+            cursor: pointer;
+            transition: all 0.1s;
+            color: white;
+            background: #34495e;
+            box-shadow: 0 3px 0 #2c3e50;
+        }
+        .fullscreen-btn:active { transform: translateY(3px); box-shadow: 0 0 0 #2c3e50; }
 
-/* ===== Mobile/compact v5 overrides (no new progress, compact HUD, fit all boards/plates) ===== */
-.balance-label{
-  font-weight: 800;
-  font-size: 0.72rem;
-  line-height: 1;
-  margin-bottom: -2px;
-  opacity: 0.95;
-  text-shadow: 1px 1px 0 #000;
+        /* Drag ghost (for mouse + touch) */
+        .drag-ghost {
+            position: fixed;
+            left: 0;
+            top: 0;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.95;
+            filter: drop-shadow(0 8px 10px rgba(0,0,0,0.6));
+        }
+        .cake { touch-action: none; } /* prevent scrolling while dragging */
+
+        /* Mobile layout */
+        @media (max-width: 1024px), (max-height: 520px), (pointer: coarse) {
+            /* No page scrolling on mobile */
+            html, body { overflow: hidden; height: 100%; }
+            body { touch-action: manipulation; }
+            .center-wrapper { padding: 0.35rem; overflow: hidden; }
+
+            /* Compact top bar: progress + controls on one line */
+            .top-bar {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0.25rem 0.35rem;
+                gap: 0.35rem;
+                overflow: visible;
+            }
+
+            .top-controls {
+                display: flex;
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 0.25rem;
+                width: 100%;
+                min-width: 0;
+            }
+/* Make everything smaller */
+            .balance-container { padding: 0.25rem 0.7rem; border-width: 2px; }
+            .balance-amount { font-size: 1.15rem; }
+            .coin-icon { width: 22px; height: 22px; }
+
+            .timer-center { min-width: 108px; padding: 0.15rem 0.25rem; }
+            .timer-display { font-size: 1.35rem; line-height: 1; }
+            .timer-bar-container { height: 8px; }
+            /* Tiny progress bar inside top-controls */
+            .progress-wrapper.in-topbar {
+                padding: 0;
+                margin: 0;
+                width: 170px;
+                max-width: 170px;
+                flex: 0 0 170px;
+                height: 44px;
+            }
+            .progress-wrapper.in-topbar .goal-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; font-weight: 800; margin: 0 0 2px 0; line-height: 1; text-shadow: 1px 1px 0 #000; }
+                        .progress-wrapper.in-topbar .matches-full { display: none; }
+            .progress-wrapper.in-topbar .matches-short { display: inline; color: #f1c40f; white-space: nowrap; }
+.progress-wrapper.in-topbar .goal-header span:last-child { display: none; }
+            .progress-wrapper.in-topbar .goal-header span:first-child { color: #f1c40f; white-space: nowrap; }
+            .progress-wrapper.in-topbar .goal-bar-bg { height: 18px; border-width: 2px; }
+            .progress-wrapper.in-topbar .goal-bar-fill { box-shadow: 0 0 10px rgba(241,196,15,0.8); }
+            .progress-wrapper.in-topbar .reward-bubbles { height: 20px; margin-top: -2px; }
+            .progress-wrapper.in-topbar .reward-bubble { width: 20px; height: 20px; font-size: 0.7rem; }
+            .progress-wrapper.in-topbar .reward-bubble img { width: 20px; height: 20px; }
+            .progress-wrapper.in-topbar .bubble-arrow { display: none; }
+            .progress-wrapper.in-topbar .bubble-icon { width: 22px; height: 22px; }
+            .progress-wrapper.in-topbar .bubble-text { font-size: 0.55rem; margin-top: -2px; }
+            .progress-wrapper.in-topbar .bubble-glow { display: none; }
+
+
+            .mode-btn, .difficulty-btn, .fullscreen-btn {
+                white-space: nowrap;
+                flex: 0 0 auto;
+                padding: 0.22rem 0.40rem;
+                font-size: 0.70rem;
+                border-radius: 18px;
+                box-shadow: 0 2px 0 rgba(0,0,0,0.35);
+            }
+            .refresh-container { padding: 0.15rem 0.55rem; border-radius: 18px; }
+            .refresh-btn { font-size: 1.3rem; }
+            .refresh-count { font-size: 0.75rem; margin-top: -3px; }
+
+            /* Tiny progress bar */
+            .progress-wrapper {
+                max-width: none;
+                margin: 0;
+                padding: 0.2rem 0 0.1rem;
+                width: 100%;
+            }
+            .goal-header {
+                font-size: 0.85rem;
+                margin-bottom: 0.15rem;
+            }
+            .goal-bar-bg {
+                height: 14px;
+                border-width: 2px;
+                border-radius: 12px;
+            }
+            .goal-bar-fill { border-radius: 12px; }
+            .goal-marker { border-right-width: 1px; }
+
+            .reward-bubbles {
+                height: 26px;
+                margin-top: -2px;
+            }
+            .bubble-arrow { display: none; }
+            .bubble-icon {
+                width: 22px;
+                height: 22px;
+                filter: drop-shadow(0 2px 2px rgba(0,0,0,0.45));
+            }
+            .reward-bubble.collected .bubble-icon::after {
+                width: 14px;
+                height: 14px;
+                font-size: 0.9rem;
+                top: -6px;
+                right: -6px;
+            }
+
+            /* Board should fit 4x3 even in Hard */
+            .board {
+                gap: 0.35rem;
+                max-width: 100vw;
+            }
+            .plank-container { margin-bottom: 0.45rem; }
+            .plank { width: 165px; height: 64px; margin-bottom: 5px; }
+            .cakes-area { width: 145px; height: 48px; gap: 5px; top: 2px; }
+            .cake { width: 44px; height: 44px; }
+
+            .plate-wrapper { width: 135px; height: 52px; }
+            .plate-area { width: 112px; height: 52px; top: -5px; gap: 4px; }
+            .future-cake { width: 28px; height: 28px; }
+        
+
+            /* Much smaller boards/plates so 4x3 fits on screen */
+            .board { gap: 0.35rem; max-width: 100vw; }
+            .plank { width: 135px; height: 48px; margin-bottom: 2px; }
+            .cakes-area { width: 118px; height: 38px; top: -2px; gap: 4px; }
+            .cake { width: 34px; height: 34px; }
+
+            .plate-wrapper { width: 118px; height: 44px; }
+            .plate-area { width: 98px; height: 44px; top: -5px; gap: 3px; }
+            .future-cake { width: 26px; height: 26px; }
+
+            /* Reduce vertical spacing */
+            .center-wrapper { padding: 0.25rem; }
 }
 
-/* make the whole header + matches area shorter on ALL devices */
-.top-bar{ padding: 0.22rem 0.45rem; }
-.balance-container{ padding: 0.22rem 0.55rem; border-width: 1px; border-radius: 18px; gap: 0.35rem; }
-.coin-icon{ width: 20px; height: 20px; }
-.balance-amount{ font-size: 1.05rem; }
+    
 
-.timer-center{ min-width: 96px; }
-.timer-display{ font-size: 1.55rem; line-height: 1; }
-.timer-bar-container{ height: 5px; border-width: 1px; margin-top: 3px; }
+/* === Mobile compact layout v8 === */
+@media (max-width: 1024px), (max-height: 520px), (pointer: coarse) {
+  /* Keep dropdown visible (don't clip) */
+  .top-bar { overflow: visible !important; }
 
-.mode-selector, .difficulty-selector{ padding: 0.14rem; }
-.mode-btn{ padding: 0.24rem 0.44rem; font-size: 0.68rem; border-radius: 18px; border-width: 1px; box-shadow: 0 2px 0 #5a6263; }
-.difficulty-btn{ padding: 0.24rem 0.42rem; font-size: 0.66rem; border-radius: 18px; border-width: 1px; box-shadow: 0 2px 0 #5a6263; }
+  /* Progress bar: thicker */
+  .goal-bar { height: 12px !important; }
+  .goal-progress { height: 12px !important; }
 
-.refresh-container{ padding: 0.10rem 0.42rem; border-width: 1px; border-radius: 18px; }
-.refresh-btn{ font-size: 1.15rem; line-height: 1; }
-.refresh-count{ font-size: 0.65rem; margin-top: 1px; }
+  /* Matches short label */
+  #matchesShort { font-size: 14px !important; font-weight: 800 !important; white-space: nowrap; }
 
-/* Matches (this is the 100/150/200 bar) — compact & placed under the top bar (left) */
-
-.matches-float{
-  position: absolute;
-  left: 12px;
-  top: calc(var(--topbar-h, 70px) + 10px);
-  z-index: 40;
-  pointer-events: none; /* не мешает перетаскиванию */
-}
-.matches-float .progress-wrapper{
-  margin: 0;
-  padding: 4px 8px 6px;
-  background: rgba(0,0,0,0.25);
-  border: 2px solid rgba(219,180,122,0.9);
-  border-radius: 14px;
-  width: min(320px, calc(100vw - 24px));
-}
-.matches-float .matches-header{ padding-left: 0; font-size: 0.80rem; margin: 0 0 4px; }
-.matches-float .goal-bar-bg{ height: 7px; border-width: 1px; }
-.matches-float .reward-bubbles{ height: 22px; margin-top: -2px; }
-.matches-float .reward-bubble{ transform: scale(0.78); transform-origin: top center; }
-@media (max-height: 440px){
-  .matches-float .progress-wrapper{ padding: 5px 8px 6px; width: min(280px, calc(100vw - 24px)); }
-  .matches-float .matches-header{ font-size: 0.74rem; }
-  .matches-float .reward-bubbles{ height: 20px; }
-  .matches-float .reward-bubble{ transform: scale(0.72); }
-}
-
-/* ===== Matches bar: fixed reward positions (1/2, 2/3, 100%) and proper sizing ===== */
-.matches-float .reward-bubbles{
-  position: relative !important;
-  width: 100%;
-  height: 34px;
-  margin-top: 4px !important;
-}
-.matches-float .reward-bubble{
-  position: absolute !important;
-  top: 0 !important;
-  transform: translateX(-50%) scale(0.9);
-  transform-origin: top center;
-}
-.matches-float .reward-bubble.edge-right{ transform: translateX(-100%) scale(0.9); }
-.matches-float .bubble-arrow{
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-  border-bottom: 9px solid #ffecb3;
-  margin-bottom: 1px;
-}
-.matches-float .bubble-icon{ width: 28px; height: 28px; }
-/* markers at 1/2 and 2/3 (3rd divider hidden) */
-.matches-float .goal-markers{ position:absolute; inset:0; display:block; }
-.matches-float .goal-marker{ position:absolute; top:0; bottom:0; width:1px; background: rgba(255,255,255,0.55); border-right:none; }
-.matches-float .goal-marker:nth-child(1){ left:50%; }
-.matches-float .goal-marker:nth-child(2){ left:66.666%; }
-.matches-float .goal-marker:nth-child(3){ display:none; }
-
-@media (max-height: 440px){
-  .matches-float .reward-bubbles{ height: 30px; }
-  .matches-float .reward-bubble{ transform: translateX(-50%) scale(0.82); }
-  .matches-float .reward-bubble.edge-right{ transform: translateX(-100%) scale(0.82); }
-  .matches-float .bubble-icon{ width: 26px; height: 26px; }
-}
-
-.progress-wrapper{ margin-top: 0.10rem; margin-bottom: 0.05rem; }
-.matches-header{
-  margin: 0.05rem 0 0.05rem;
-  padding-left: 0.75rem;
-  font-size: 0.86rem;
-}
-.goal-header{ display:none; } /* убираем лишнюю шапку, чтобы не тратить высоту */
-.goal-bar-bg{ height: 6px; border-width: 1px; }
-.reward-bubbles{ height: 30px; margin-top: -4px; }
-
-/* make the playfield itself smaller on short screens so EVERYTHING fits without scroll */
-@media (max-height: 520px), (max-width: 900px){
-  .center-wrapper{ padding: 0.10rem 0.20rem 0.20rem; }
-  .plank{ width: 125px; height: 48px; margin-bottom: 3px; }
-  .cakes-area{ width: 108px; height: 36px; gap: 4px; }
-  .cake{ width: 36px; height: 36px; }
-  .plate-wrapper{ width: 112px; height: 44px; }
-  .plate-area{ width: 94px; height: 44px; top: -5px; gap: 3px; }
-  .future-cake{ width: 24px; height: 24px; }
-}
-
-/* extra-tight for landscape phones */
-@media (max-height: 440px){
-  .top-bar{ padding: 0.16rem 0.35rem; }
-  .timer-display{ font-size: 1.35rem; }
-  .mode-btn{ padding: 0.18rem 0.35rem; font-size: 0.62rem; }
-  .difficulty-btn{ padding: 0.18rem 0.33rem; font-size: 0.60rem; }
-  .matches-header{ font-size: 0.78rem; }
-  .plank{ width: 112px; height: 44px; }
-  .cake{ width: 32px; height: 32px; }
-  .plate-wrapper{ width: 112px; height: 44px; }
-  .plate-area{ width: 92px; height: 44px; top: -6px; }
-  .goal-bar-bg{ height: 5px; }
-  .reward-bubbles{ height: 26px; }
-}
-
-/* ===== Mobile/Responsive HUD fixes (v8) ===== */
-.left-hud{
-    display:flex;
-    flex-direction:column;
-    align-items:flex-start;
-    gap:2px;
-}
-
-/* Прогресс мэтчей маленький под балансом */
-.left-hud .progress-wrapper{
-    max-width: 260px;
-    margin: 2px 0 0 0;
-}
-.left-hud .matches-header{ font-size: 0.78rem; }
-.left-hud .goal-bar-bg{ height: 4px; }
-.left-hud .reward-bubbles{ top: 7px; height: 20px; }
-.left-hud .bubble-icon{ width: 20px; height: 20px; }
-.left-hud .bubble-arrow{ border-left-width: 4px; border-right-width: 4px; border-bottom-width: 5px; }
-
-/* Убираем старую компенсацию сверху — прогресс теперь внутри верхней панели */
-.center-wrapper{ padding-top: 0 !important; }
-
-/* На телефонах ещё компактнее */
-@media (max-width: 600px){
-    .left-hud .progress-wrapper{ max-width: 220px; }
-    .left-hud .matches-header{ font-size: 0.72rem; }
-    .left-hud .goal-bar-bg{ height: 6px; }
-    .left-hud .bubble-icon{ width: 18px; height: 18px; }
-    .left-hud .reward-bubbles{ top: 6px; height: 18px; }
-}
-
-
-/* ===== Coarse pointer layout: enforce 4 columns and difficulty rows ===== */
-@media (pointer: coarse), (max-width: 900px){
-  .board{
-    display: grid !important;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-auto-flow: row;
-    gap: 6px 8px;
-    justify-items: center;
-    align-items: start;
-    width: 100%;
-    max-width: none;
-  }
-  .plank-cell{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    margin: 0;
-  }
-  /* rows are implied by item count (8 for medium, 12 for hard),
-     but keep a stable vertical rhythm */
-  .difficulty-medium .board{ grid-auto-rows: min-content; }
-  .difficulty-hard .board{ grid-auto-rows: min-content; }
-}
-
-.matches-float .bubble-arrow{
-  border-left-width: 6px !important;
-  border-right-width: 6px !important;
-  border-bottom-width: 8px !important;
-  margin-bottom: 2px !important;
-}
-.matches-float .bubble-icon{
-  width: 22px !important;
-  height: 22px !important;
-}
-@media (max-height: 520px){
-  .matches-float .bubble-icon{ width: 18px !important; height: 18px !important; }
-  .matches-float .bubble-arrow{
-    border-left-width: 5px !important;
-    border-right-width: 5px !important;
-    border-bottom-width: 7px !important;
-  }
-}
-
-
-/* ===== Stats compact on phones ===== */
-@media (pointer: coarse), (max-width: 900px){
-  .stats-dropdown{
+  /* Stats dropdown: fit screen */
+  .stats-dropdown {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    min-width: unset !important;
+    width: min(92vw, 520px) !important;
+    max-height: 72vh !important;
+    overflow: auto !important;
     padding: 12px !important;
     border-width: 2px !important;
-    border-radius: 14px !important;
+    border-radius: 16px !important;
   }
-  .stats-header{ font-size: 1.1rem !important; }
-  .stat-value{ font-size: 1.2rem !important; }
-  .stat-label{ font-size: 0.75rem !important; }
-  .profile-btn, .save-btn{ padding: 6px 8px !important; font-size: 0.72rem !important; }
+  .stats-grid { gap: 10px !important; }
+  .stat-card { padding: 10px !important; border-radius: 14px !important; }
+  .stat-card .stat-value { font-size: 34px !important; }
+
+  /* Game field: 4 columns */
+  .board {
+    max-width: 100vw !important;
+    justify-content: flex-start !important;
+    gap: 6px !important;
+    padding: 0 6px !important;
+  }
+
+  /* Planks and plates scaled to fit 4 per row */
+  .plank {
+    width: calc((100vw - 12px - 18px) / 4) !important; /* 2*pad + 3*gaps */
+    height: calc((100vw - 12px - 18px) / 4 * 0.40) !important;
+    margin-bottom: 4px !important;
+  }
+  .plate-wrapper {
+    width: calc((100vw - 12px - 18px) / 4 * 0.84) !important;
+    height: calc((100vw - 12px - 18px) / 4 * 0.32) !important;
+  }
+  .plate-area {
+    width: calc((100vw - 12px - 18px) / 4 * 0.70) !important;
+    height: calc((100vw - 12px - 18px) / 4 * 0.32) !important;
+    top: -8px !important;
+  }
+  .future-cake, .cake {
+    width: calc((100vw - 12px - 18px) / 4 * 0.18) !important;
+    height: calc((100vw - 12px - 18px) / 4 * 0.18) !important;
+  }
 }
 </style>
 </head>
 <body>
-<!-- Прелоадер -->
-<div class="preloader" id="preloader">
-<div class="preloader-content">
-<div class="preloader-title">Загрузка...</div>
-<div class="preloader-bar-bg">
-<div class="preloader-bar-fill" id="preloaderBar" style="width: 0%;"></div>
+    <!-- Прелоадер -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-content">
+            <div class="preloader-title">Загрузка...</div>
+            <div class="preloader-bar-bg">
+                <div class="preloader-bar-fill" id="preloaderBar" style="width: 0%;"></div>
+            </div>
+            <div class="preloader-text">
+                <span id="preloaderFileName">Подготовка текстур</span>
+                <span class="preloader-percent" id="preloaderPercent">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Верхняя панель -->
+    <div class="top-bar">
+        <div class="balance-container" id="balanceContainer">
+            <div class="coin-icon"></div>
+            <div class="balance-amount" id="balanceDisplay">0</div>
+        </div>
+
+        <div class="stats-dropdown" id="statsDropdown">
+            <div class="stats-header">
+                <span>Статистика</span>
+                <span class="close-stats" id="closeStats">×</span>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="totalMatches">0</div>
+                    <div class="stat-label">Всего мэтчей</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalWins">0</div>
+                    <div class="stat-label">Побед</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalGames">0</div>
+                    <div class="stat-label">Игр сыграно</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="bestScore">0</div>
+                    <div class="stat-label">Рекорд</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="totalCoins">0</div>
+                    <div class="stat-label">Всего монет</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="winPercent">0%</div>
+                    <div class="stat-label">% побед</div>
+                </div>
+            </div>
+
+            <div class="profile-selector">
+                <button class="profile-btn active" data-profile="guest1">Гость 1</button>
+                <button class="profile-btn" data-profile="guest2">Гость 2</button>
+                <button class="profile-btn" data-profile="guest3">Гость 3</button>
+            </div>
+
+            <div class="save-buttons">
+                <button class="save-btn save" id="saveGameBtn">Сохранить</button>
+                <button class="save-btn export" id="exportGameBtn">Экспорт</button>
+                <button class="save-btn import" id="importGameBtn">Импорт</button>
+            </div>
+        </div>
+
+        <div class="timer-center">
+            <div class="timer-display" id="timerDisplay">3:00</div>
+            <div class="timer-bar-container">
+                <div class="timer-bar-fill" id="timerBar" style="width: 100%; background-color: #2ecc71;"></div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="mode-selector">
+                <button class="mode-btn active" data-mode="timed">3 мин</button>
+                <button class="mode-btn" data-mode="speed">Speed</button>
+            </div>
+
+            <div class="difficulty-selector">
+                <button class="difficulty-btn easy active" data-difficulty="easy">Easy</button>
+                <button class="difficulty-btn medium" data-difficulty="medium">Medium</button>
+                <button class="difficulty-btn hard" data-difficulty="hard">Hard</button>
+            </div>
 </div>
-<div class="preloader-text">
-<span id="preloaderFileName">Подготовка текстур</span>
-<span class="preloader-percent" id="preloaderPercent">0%</span>
-</div>
-</div>
-</div>
-<!-- Верхняя панель -->
-<div class="top-bar">
-<div class="left-hud">
-<div class="balance-container" id="balanceContainer"><div class="coin-icon"></div>
-<div class="balance-amount" id="balanceDisplay">0</div>
-</div>
-</div>
-<div class="stats-dropdown" id="statsDropdown">
-<div class="stats-header">
-<span>Статистика</span>
-<span class="close-stats" id="closeStats">×</span>
-</div>
-<div class="stats-grid">
-<div class="stat-item">
-<div class="stat-value" id="totalMatches">0</div>
-<div class="stat-label">Всего мэтчей</div>
-</div>
-<div class="stat-item">
-<div class="stat-value" id="totalWins">0</div>
-<div class="stat-label">Побед</div>
-</div>
-<div class="stat-item">
-<div class="stat-value" id="totalGames">0</div>
-<div class="stat-label">Игр сыграно</div>
-</div>
-<div class="stat-item">
-<div class="stat-value" id="bestScore">0</div>
-<div class="stat-label">Рекорд</div>
-</div>
-<div class="stat-item">
-<div class="stat-value" id="totalCoins">0</div>
-<div class="stat-label">Всего монет</div>
-</div>
-<div class="stat-item">
-<div class="stat-value" id="winPercent">0%</div>
-<div class="stat-label">% побед</div>
-</div>
-</div>
-<div class="profile-selector">
-<button class="profile-btn active" data-profile="guest1">Гость 1</button>
-<button class="profile-btn" data-profile="guest2">Гость 2</button>
-<button class="profile-btn" data-profile="guest3">Гость 3</button>
-</div>
-<div class="save-buttons">
-<button class="save-btn save" id="saveGameBtn">Сохранить</button>
-<button class="save-btn export" id="exportGameBtn">Экспорт</button>
-<button class="save-btn import" id="importGameBtn">Импорт</button>
-</div>
-</div>
-<div class="timer-center">
-<div class="timer-display" id="timerDisplay">3:00</div>
-<div class="timer-bar-container">
-<div class="timer-bar-fill" id="timerBar" style="width: 100%; background-color: #2ecc71;"></div>
-</div>
-</div>
-<div class="right-panel">
-<div class="mode-selector">
-<button class="mode-btn active" data-mode="timed">3 мин</button>
-<button class="mode-btn" data-mode="speed">Speed</button>
-</div>
-<div class="difficulty-selector">
-<button class="difficulty-btn easy active" data-difficulty="easy">Easy</button>
-<button class="difficulty-btn medium" data-difficulty="medium">Medium</button>
-<button class="difficulty-btn hard" data-difficulty="hard">Hard</button>
-</div>
-<div class="refresh-container">
-<div class="refresh-btn" id="refreshBtn">🔄</div>
-<div class="refresh-count" id="refreshCount">3/3</div>
-</div>
-</div>
-</div>
-<div class="matches-float" id="matchesFloat">
-<div class="progress-wrapper">
-<div class="matches-header">Мэтчи: <span id="matchesCount">0</span>/<span id="goalCount">20</span></div>
-<div class="goal-container">
-<div class="goal-bar-bg">
-<div class="goal-bar-fill" id="rewardProgress" style="width: 0%;"></div>
-<div class="goal-markers">
-<div class="goal-marker"></div>
-<div class="goal-marker"></div>
-<div class="goal-marker"></div>
-</div>
-</div>
-</div>
-<div class="reward-bubbles">
-<div class="reward-bubble" id="reward1" style="left:50%;">
-<div class="bubble-arrow"></div>
-<div class="bubble-icon" style="background-image: url('100coins.png');"></div>
-</div>
-<div class="reward-bubble" id="reward2" style="left:66.666%;">
-<div class="bubble-arrow"></div>
-<div class="bubble-icon" style="background-image: url('150coins.png');"></div>
-</div>
-<div class="reward-bubble edge-right" id="reward3" style="left:100%;">
-<div class="bubble-arrow"></div>
-<div class="bubble-icon" style="background-image: url('200coins.png');"></div>
-</div>
-</div>
-</div>
-</div>
-<div class="center-wrapper">
-<div class="board" id="board"></div>
-</div>
-<!-- Модальные окна -->
-<div class="modal" id="exportModal">
-<div class="modal-content">
-<h3>📤 Экспорт сохранения</h3>
-<textarea id="exportData" readonly=""></textarea>
-<div class="modal-buttons">
-<button class="modal-btn confirm" id="copyExportBtn">Копировать</button>
-<button class="modal-btn cancel" id="closeExportBtn">Закрыть</button>
-</div>
-</div>
-</div>
-<div class="modal" id="importModal">
-<div class="modal-content">
-<h3>📥 Импорт сохранения</h3>
-<textarea id="importData" placeholder="Вставьте сюда код сохранения..."></textarea>
-<div class="modal-buttons">
-<button class="modal-btn confirm" id="confirmImportBtn">Импорт</button>
-<button class="modal-btn cancel" id="closeImportBtn">Отмена</button>
-</div>
-</div>
-</div>
-<div class="game-overlay" id="gameOverlay">
-<div class="game-over-content">
-<h2 id="gameOverTitle">😢 Ты проиграл!</h2>
-<button class="restart-btn" id="restartFromOverlay">Начать заново</button>
-</div>
-</div>
-<div class="victory-overlay" id="victoryOverlay">
-<div class="victory-content">
-<h2>🎉 Победа!</h2>
-<button class="restart-btn" id="restartFromVictory">Играть снова</button>
-</div>
-</div>
-<script>
+            <div class="refresh-container">
+                <div class="refresh-btn" id="refreshBtn">🔄</div>
+                <div class="refresh-count" id="refreshCount">3/3</div>
+            </div>
+            <button class="fullscreen-btn" id="fullscreenBtn" title="Полноэкранный режим">Fullscreen</button>
+        </div>
+    </div>
+
+    <div id="progressAnchor"></div>
+
+    <!-- Прогресс-бар с наградами -->
+    <div class="progress-wrapper">
+        <div class="goal-container">
+            <div class="goal-header">
+                <span class="matches-full">Мэтчи: <span id="matchesCount">0</span>/<span id="goalCount">20</span></span>
+                <span class="matches-short" id="matchesShort">0/20</span>
+                <span>Награды</span>
+            </div>
+            <div class="goal-bar-bg">
+                <div class="goal-bar-fill" id="goalProgress" style="width: 0%;"></div>
+                <div class="goal-markers">
+                    <div class="goal-marker"></div>
+                    <div class="goal-marker"></div>
+                    <div class="goal-marker"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="reward-bubbles">
+            <div class="reward-bubble" id="reward1" style="left: 33.33%;">
+                <div class="bubble-arrow"></div>
+                <div class="bubble-icon" style="background-image: url('100coins.png');"></div>
+            </div>
+            <div class="reward-bubble" id="reward2" style="left: 66.66%;">
+                <div class="bubble-arrow"></div>
+                <div class="bubble-icon" style="background-image: url('150coins.png');"></div>
+            </div>
+            <div class="reward-bubble" id="reward3" style="left: 100%;">
+                <div class="bubble-arrow"></div>
+                <div class="bubble-icon" style="background-image: url('200coins.png');"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="center-wrapper">
+        <div class="board" id="board"></div>
+    </div>
+
+    <!-- Модальные окна -->
+    <div class="modal" id="exportModal">
+        <div class="modal-content">
+            <h3>📤 Экспорт сохранения</h3>
+            <textarea id="exportData" readonly></textarea>
+            <div class="modal-buttons">
+                <button class="modal-btn confirm" id="copyExportBtn">Копировать</button>
+                <button class="modal-btn cancel" id="closeExportBtn">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="importModal">
+        <div class="modal-content">
+            <h3>📥 Импорт сохранения</h3>
+            <textarea id="importData" placeholder="Вставьте сюда код сохранения..."></textarea>
+            <div class="modal-buttons">
+                <button class="modal-btn confirm" id="confirmImportBtn">Импорт</button>
+                <button class="modal-btn cancel" id="closeImportBtn">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="game-overlay" id="gameOverlay">
+        <div class="game-over-content">
+            <h2 id="gameOverTitle">😢 Ты проиграл!</h2>
+            <button class="restart-btn" id="restartFromOverlay">Начать заново</button>
+        </div>
+    </div>
+
+    <div class="victory-overlay" id="victoryOverlay">
+        <div class="victory-content">
+            <h2>🎉 Победа!</h2>
+            <button class="restart-btn" id="restartFromVictory">Играть снова</button>
+        </div>
+    </div>
+
+    <script>
         // ========== ПРЕЛОАДЕР ТЕКСТУР ==========
         // Создаем массив с 22 текстурами тортиков + остальные
         const textures = [
@@ -1548,134 +1384,66 @@ html, body {
             let sourcePlankIdx = null;
             let sourceCakeIdx = null;
 
-
-// ====== ТАЧ / POINTER DRAG (для телефонов) ======
-let pointerDragId = null;
-let dragGhost = null;
-let currentDropTarget = null;
-
-function isCoarsePointer() {
-    return window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
-}
-
-function createDragGhost(flavor) {
-    const g = document.createElement('div');
-    g.className = 'drag-ghost';
-    g.style.backgroundImage = `url('cupcake${parseInt(flavor, 10) + 1}.png')`;
-    document.body.appendChild(g);
-    return g;
-}
-
-function moveDragGhost(x, y) {
-    if (!dragGhost) return;
-    // небольшой сдвиг, чтобы палец не закрывал тортик
-    const offsetX = 8;
-    const offsetY = 8;
-    dragGhost.style.transform = `translate(${x + offsetX}px, ${y + offsetY}px) scale(1.05)`;
-}
-
-function setDropTarget(plankEl) {
-    if (currentDropTarget === plankEl) return;
-    if (currentDropTarget) currentDropTarget.classList.remove('drop-target');
-    currentDropTarget = plankEl;
-    if (currentDropTarget) currentDropTarget.classList.add('drop-target');
-}
-
-function cleanupPointerDrag() {
-    if (dragGhost) {
-        dragGhost.remove();
-        dragGhost = null;
-    }
-    setDropTarget(null);
-    pointerDragId = null;
-    clearDrag();
-}
-
-function handlePointerDownOnCake(e) {
-    if (!gameActive) return;
-    if (!isCoarsePointer()) return; // ПК не трогаем
-
-    const cake = e.currentTarget;
-    if (!cake || !cake.classList.contains('cake')) return;
-
-    // не даём странице скроллиться/выделяться при жесте
-    e.preventDefault();
-
-    sourcePlankIdx = parseInt(cake.dataset.plank, 10);
-    sourceCakeIdx = parseInt(cake.dataset.position, 10);
-
-    draggedElement = cake;
-    cake.classList.add('dragging');
-
-    pointerDragId = e.pointerId;
-    try { cake.setPointerCapture(pointerDragId); } catch (_) {}
-
-    // создаем "призрак" тортика
-    dragGhost = createDragGhost(cake.dataset.flavor);
-    moveDragGhost(e.clientX, e.clientY);
-}
-
-function handlePointerMove(e) {
-    if (!gameActive) return;
-    if (pointerDragId === null) return;
-    if (e.pointerId !== pointerDragId) return;
-
-    e.preventDefault();
-    moveDragGhost(e.clientX, e.clientY);
-
-    const el = document.elementFromPoint(e.clientX, e.clientY);
-    const plankEl = el ? el.closest('.plank') : null;
-    setDropTarget(plankEl);
-}
-
-function handlePointerUpOrCancel(e) {
-    if (pointerDragId === null) return;
-    if (e.pointerId !== pointerDragId) return;
-
-    e.preventDefault();
-
-    const el = document.elementFromPoint(e.clientX, e.clientY);
-    const plankEl = el ? el.closest('.plank') : null;
-
-    if (plankEl && plankEl.dataset && plankEl.dataset.index !== undefined) {
-        const idx = parseInt(plankEl.dataset.index, 10);
-        attemptMove(idx);
-    }
-
-    cleanupPointerDrag();
-}
-
             // Элементы
             const body = document.body;
-            const goalProgressMini = document.getElementById('goalProgress'); // может отсутствовать (моб. мини-бар убран)
-            const rewardProgress = document.getElementById('rewardProgress');
+            const goalProgress = document.getElementById('goalProgress');
             const matchesCount = document.getElementById('matchesCount');
             const goalCount = document.getElementById('goalCount');
             const balanceDisplay = document.getElementById('balanceDisplay');
             const timerBar = document.getElementById('timerBar');
             const timerDisplay = document.getElementById('timerDisplay');
             const refreshCount = document.getElementById('refreshCount');
-            const topBarEl = document.querySelector('.top-bar');
-
-            function updateHudMetrics() {
-                if (!topBarEl) return;
-                document.documentElement.style.setProperty('--topbar-h', topBarEl.offsetHeight + 'px');
-            }
-
-            function applyDifficultyClass() {
-                const root = document.documentElement;
-                root.classList.remove('difficulty-easy','difficulty-medium','difficulty-hard');
-                root.classList.add('difficulty-' + currentDifficulty);
-            }
-
-            window.addEventListener('resize', () => {
-                updateHudMetrics();
-            }, { passive: true });
-
             const refreshBtn = document.getElementById('refreshBtn');
             const gameOverlay = document.getElementById('gameOverlay');
             const victoryOverlay = document.getElementById('victoryOverlay');
             const gameOverTitle = document.getElementById('gameOverTitle');
+
+            // ========== RESPONSIVE LAYOUT (progress bar inside top bar on mobile) ==========
+            const topBarEl = document.querySelector('.top-bar');
+            const progressWrapperEl = document.querySelector('.progress-wrapper');
+            const progressAnchor = document.getElementById('progressAnchor');
+
+            function applyResponsiveLayout() {
+                const isMobile = (window.matchMedia && (
+                    window.matchMedia('(max-width: 1024px)').matches ||
+                    window.matchMedia('(max-height: 520px)').matches ||
+                    window.matchMedia('(pointer: coarse)').matches
+                ));
+
+                if (!topBarEl || !progressWrapperEl) return;
+
+                // Create controls wrapper once
+                let controls = topBarEl.querySelector('.top-controls');
+                if (!controls) {
+                    controls = document.createElement('div');
+                    controls.className = 'top-controls';
+
+                    const existing = Array.from(topBarEl.children);
+                    existing.forEach(ch => {
+                        if (ch.classList && ch.classList.contains('progress-wrapper')) return;
+                        controls.appendChild(ch);
+                    });
+                    topBarEl.appendChild(controls);
+                }
+
+                if (isMobile) {
+                    // Move progress to top inside top-bar
+                    controls.insertBefore(progressWrapperEl, controls.firstChild);
+                    progressWrapperEl.classList.add('in-topbar');
+                } else {
+                    // Move progress back under top-bar
+                    if (progressAnchor && progressAnchor.parentNode) {
+                        if (progressAnchor.nextSibling !== progressWrapperEl) {
+                            progressAnchor.parentNode.insertBefore(progressWrapperEl, progressAnchor.nextSibling);
+                        }
+                    }
+                    progressWrapperEl.classList.remove('in-topbar');
+                }
+            }
+
+            window.addEventListener('resize', applyResponsiveLayout, { passive: true });
+            applyResponsiveLayout();
+
             
             const reward1 = document.getElementById('reward1');
             const reward2 = document.getElementById('reward2');
@@ -1689,7 +1457,7 @@ function handlePointerUpOrCancel(e) {
             const winPercentEl = document.getElementById('winPercent');
             
             const balanceContainer = document.getElementById('balanceContainer');
-            const statsDropdown = document.getElementById('statsDropdown');
+const statsDropdown = document.getElementById('statsDropdown');
             const closeStats = document.getElementById('closeStats');
             
             const exportModal = document.getElementById('exportModal');
@@ -1698,22 +1466,23 @@ function handlePointerUpOrCancel(e) {
             const importData = document.getElementById('importData');
 
             // ========== UI СТАТИСТИКИ ==========
-            balanceContainer.addEventListener('click', () => {
-                statsDropdown.classList.toggle('show');
-                balanceContainer.classList.toggle('active');
-            });
+			balanceContainer.addEventListener('click', () => {
+				statsDropdown.classList.toggle('show');
+				balanceContainer.classList.toggle('active');
+			});
 
-            closeStats.addEventListener('click', () => {
-                statsDropdown.classList.remove('show');
-                balanceContainer.classList.remove('active');
-            });
+			closeStats.addEventListener('click', () => {
+				statsDropdown.classList.remove('show');
+				balanceContainer.classList.remove('active');
+			});
 
-            document.addEventListener('click', (e) => {
-                if (!balanceContainer.contains(e.target) && !statsDropdown.contains(e.target)) {
-                    statsDropdown.classList.remove('show');
-                    balanceContainer.classList.remove('active');
-                }
-            });
+			document.addEventListener('click', (e) => {
+				if (!balanceContainer.contains(e.target) && 
+					!statsDropdown.contains(e.target)) {
+					statsDropdown.classList.remove('show');
+					balanceContainer.classList.remove('active');
+				}
+			});
 
             // ========== СИСТЕМА СОХРАНЕНИЙ ==========
             function loadFromStorage() {
@@ -1985,8 +1754,6 @@ function handlePointerUpOrCancel(e) {
 
             function initGame(resetRefreshes = true) {
                 stopTimer();
-                applyDifficultyClass();
-                updateHudMetrics();
                 
                 if (matches > 0) {
                     playerStats.totalGames++;
@@ -2089,7 +1856,7 @@ function handlePointerUpOrCancel(e) {
 
                 planks.forEach((plank, plankIndex) => {
                     const container = document.createElement('div');
-                    container.className = 'plank-cell';
+                    container.className = 'plank-container';
 
                     const plankDiv = document.createElement('div');
                     plankDiv.className = 'plank';
@@ -2105,14 +1872,9 @@ function handlePointerUpOrCancel(e) {
                         cake.setAttribute('data-flavor', flavor);
                         cake.setAttribute('data-plank', plankIndex);
                         cake.setAttribute('data-position', pos);
-                        cake.setAttribute('draggable', (gameActive && !(window.matchMedia && window.matchMedia('(pointer: coarse)').matches)) ? 'true' : 'false');
+                        cake.setAttribute('draggable', 'false');
 
-                        cake.addEventListener('dragstart', handleDragStart);
-                        cake.addEventListener('pointerdown', handlePointerDownOnCake);
-                        cake.addEventListener('dragend', handleDragEnd);
-                        cake.addEventListener('dragover', (e) => e.preventDefault());
-                        cake.addEventListener('drop', handleDropOnCake);
-
+                        cake.addEventListener('pointerdown', onCakePointerDown);
                         cakesArea.appendChild(cake);
                     }
 
@@ -2136,72 +1898,157 @@ function handlePointerUpOrCancel(e) {
                     container.appendChild(plankDiv);
                     container.appendChild(plateWrapper);
 
-                    container.addEventListener('dragover', (e) => e.preventDefault());
-                    container.addEventListener('drop', handleDropOnPlank);
-
                     boardEl.appendChild(container);
                 });
             }
 
-            function handleDragStart(e) {
-                if (!gameActive) {
+            
+            
+            // ========== DISABLE PAGE SCROLL (GAME SHOULD NOT MOVE) ==========
+            (function lockScroll() {
+                const shouldAllow = (target) => {
+                    if (!target) return false;
+                    return !!target.closest('.modal-content, textarea');
+                };
+                const prevent = (e) => {
+                    if (shouldAllow(e.target)) return;
                     e.preventDefault();
-                    return;
-                }
-                
-                const cake = e.target.closest('.cake');
-                if (!cake) return;
+                };
+                window.addEventListener('touchmove', prevent, { passive: false });
+                window.addEventListener('wheel', prevent, { passive: false });
+            })();
 
-                sourcePlankIdx = parseInt(cake.dataset.plank, 10);
-                sourceCakeIdx = parseInt(cake.dataset.position, 10);
+// ========== DRAG (MOUSE + TOUCH) ==========
+            // HTML5 drag&drop плохо работает на телефонах, поэтому используем Pointer Events.
+            let dragGhost = null;
+            let activePointerId = null;
+            let lastClientX = 0;
+            let lastClientY = 0;
 
-                e.dataTransfer.setData('text/plain', JSON.stringify({
-                    sourcePlank: sourcePlankIdx,
-                    sourcePos: sourceCakeIdx
-                }));
-
-                cake.classList.add('dragging');
-                draggedElement = cake;
+            function setGhostPos(x, y) {
+                if (!dragGhost) return;
+                dragGhost.style.left = x + 'px';
+                dragGhost.style.top = y + 'px';
             }
 
-            function handleDragEnd(e) {
+            function createGhostFromCake(cakeEl, x, y) {
+                const ghost = cakeEl.cloneNode(true);
+                ghost.classList.add('drag-ghost');
+                ghost.classList.remove('dragging', 'matched');
+                ghost.style.opacity = '0.95';
+                ghost.style.cursor = 'grabbing';
+
+                // Подстраиваем размер под текущий (на мобилке он меньше)
+                const rect = cakeEl.getBoundingClientRect();
+                ghost.style.width = rect.width + 'px';
+                ghost.style.height = rect.height + 'px';
+
+                document.body.appendChild(ghost);
+                setGhostPos(x, y);
+                return ghost;
+            }
+
+            function clearDrag() {
                 if (draggedElement) {
                     draggedElement.classList.remove('dragging');
                 }
                 draggedElement = null;
                 sourcePlankIdx = null;
                 sourceCakeIdx = null;
+
+                if (dragGhost) {
+                    dragGhost.remove();
+                    dragGhost = null;
+                }
+
+                if (activePointerId !== null) {
+                    activePointerId = null;
+                }
             }
 
-            function handleDropOnCake(e) {
-                e.preventDefault();
+            function getTargetPlankIndexAt(x, y) {
+                const el = document.elementFromPoint(x, y);
+                if (!el) return null;
+
+                const cake = el.closest && el.closest('.cake');
+                if (cake && cake.dataset && cake.dataset.plank !== undefined) {
+                    return parseInt(cake.dataset.plank, 10);
+                }
+
+                const plank = el.closest && el.closest('.plank');
+                if (plank && plank.dataset && plank.dataset.index !== undefined) {
+                    return parseInt(plank.dataset.index, 10);
+                }
+
+                return null;
+            }
+
+            function onCakePointerDown(e) {
                 if (!gameActive) return;
-                
-                const targetCake = e.target.closest('.cake');
-                if (!targetCake) return;
 
-                const targetPlankIdx = targetCake.dataset.plank;
-                if (targetPlankIdx === undefined) return;
+                const cake = e.target.closest('.cake');
+                if (!cake) return;
 
-                attemptMove(parseInt(targetPlankIdx, 10));
-            }
+                // Только ЛКМ на мышке (на тачах button обычно 0)
+                if (e.pointerType === 'mouse' && e.button !== 0) return;
 
-            function handleDropOnPlank(e) {
                 e.preventDefault();
-                if (!gameActive) return;
-                
-                const container = e.target.closest('div[style*="margin-bottom"]');
-                if (!container) return;
 
-                const plankDiv = container.querySelector('.plank');
-                if (!plankDiv) return;
+                activePointerId = e.pointerId;
+                lastClientX = e.clientX;
+                lastClientY = e.clientY;
 
-                const targetPlankIdx = plankDiv.dataset.index;
-                if (targetPlankIdx === undefined) return;
+                sourcePlankIdx = parseInt(cake.dataset.plank, 10);
+                sourceCakeIdx = parseInt(cake.dataset.position, 10);
 
-                attemptMove(parseInt(targetPlankIdx, 10));
+                draggedElement = cake;
+                draggedElement.classList.add('dragging');
+
+                // Ghost (чтобы тортик было видно при перетаскивании)
+                dragGhost = createGhostFromCake(cake, e.clientX, e.clientY);
+
+                // Захватываем указатель, чтобы не терять события
+                try { cake.setPointerCapture(e.pointerId); } catch (_) {}
+
+                document.addEventListener('pointermove', onGlobalPointerMove, { passive: false });
+                document.addEventListener('pointerup', onGlobalPointerUp, { passive: false, once: true });
+                document.addEventListener('pointercancel', onGlobalPointerCancel, { passive: false, once: true });
             }
 
+            function onGlobalPointerMove(e) {
+                if (!gameActive) return;
+                if (activePointerId === null || e.pointerId !== activePointerId) return;
+
+                e.preventDefault();
+                lastClientX = e.clientX;
+                lastClientY = e.clientY;
+                setGhostPos(e.clientX, e.clientY);
+            }
+
+            function onGlobalPointerUp(e) {
+                if (activePointerId === null || e.pointerId !== activePointerId) {
+                    // все равно подчистим слушатели
+                    document.removeEventListener('pointermove', onGlobalPointerMove);
+                    return;
+                }
+
+                e.preventDefault();
+                document.removeEventListener('pointermove', onGlobalPointerMove);
+
+                const targetPlankIdx = getTargetPlankIndexAt(e.clientX, e.clientY);
+                if (targetPlankIdx !== null) {
+                    attemptMove(targetPlankIdx);
+                } else {
+                    clearDrag();
+                }
+            }
+
+            function onGlobalPointerCancel(e) {
+                document.removeEventListener('pointermove', onGlobalPointerMove);
+                clearDrag();
+            }
+
+            
             function attemptMove(targetPlankIdx) {
                 if (!gameActive) return;
                 if (sourcePlankIdx === null || sourceCakeIdx === null) {
@@ -2331,18 +2178,10 @@ function handlePointerUpOrCancel(e) {
             function updateCounter() {
                 matchesCount.textContent = matches;
                 goalCount.textContent = goal;
+                const matchesShort = document.getElementById('matchesShort');
+                if (matchesShort) matchesShort.textContent = `Мэтчи: ${matches}/${goal}`;
                 const percent = (matches / goal) * 100;
-                if (goalProgressMini) goalProgressMini.style.width = `${percent}%`;
-                if (rewardProgress) rewardProgress.style.width = `${percent}%`;
-            }
-
-            function clearDrag() {
-                if (draggedElement) {
-                    draggedElement.classList.remove('dragging');
-                }
-                draggedElement = null;
-                sourcePlankIdx = null;
-                sourceCakeIdx = null;
+                goalProgress.style.width = `${percent}%`;
             }
 
             // ========== ОБРАБОТЧИКИ ==========
@@ -2400,28 +2239,44 @@ function handlePointerUpOrCancel(e) {
                     document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     currentDifficulty = btn.dataset.difficulty;
-                    applyDifficultyClass();
-                    updateHudMetrics();
                     initGame(true);
                 });
             });
 
             refreshBtn.addEventListener('click', refreshBoard);
 
+            // Fullscreen (как F11 на ПК)
+            const fullscreenBtn = document.getElementById('fullscreenBtn');
+            if (fullscreenBtn) {
+                const updateFsLabel = () => {
+                    const isFs = !!document.fullscreenElement;
+                    fullscreenBtn.textContent = isFs ? 'Exit Fullscreen' : 'Fullscreen';
+                };
+
+                fullscreenBtn.addEventListener('click', async () => {
+                    try {
+                        if (!document.fullscreenElement) {
+                            await document.documentElement.requestFullscreen();
+                        } else {
+                            await document.exitFullscreen();
+                        }
+                    } catch (err) {
+                        // На iOS Safari fullscreen может быть недоступен
+                        console.warn('Fullscreen error:', err);
+                    } finally {
+                        updateFsLabel();
+                    }
+                });
+
+                document.addEventListener('fullscreenchange', updateFsLabel);
+                updateFsLabel();
+            }
+
+
             document.getElementById('restartFromOverlay').addEventListener('click', () => initGame(true));
             document.getElementById('restartFromVictory').addEventListener('click', () => initGame(true));
 
-            document.addEventListener('dragover', (e) => e.preventDefault());
-            document.addEventListener('drop', (e) => e.preventDefault());
-
-            // Pointer listeners (тач-перетаскивание)
-            document.addEventListener('pointermove', handlePointerMove, { passive: false });
-            document.addEventListener('pointerup', handlePointerUpOrCancel, { passive: false });
-            document.addEventListener('pointercancel', handlePointerUpOrCancel, { passive: false });
-
             loadFromStorage();
-            applyDifficultyClass();
-            updateHudMetrics();
             initGame(true);
         }
 
